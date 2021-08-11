@@ -1,8 +1,6 @@
-//function message() {
-//  window.alert("Headphones are recommended for the best user experience.
-//Cellphone and laptop may not be able to produce frequencies near or below 90 Hz.");
-//}
-//message();
+function message() {
+ window.alert("Headphones are recommended for the best user experience. Cellphone and laptop may not be able to produce frequencies near or below 90 Hz.");
+}
 
 'use strict'
 
@@ -56,6 +54,12 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     }
     console.log(t, v ,phi ,h ,f);
 
+    // Move to CSS?
+    let layout = {
+        plot_bgcolor:"#383838",
+        paper_bgcolor:"#181818"
+    };
+
     let trace0 = {
         x: t,
         y: h,
@@ -64,7 +68,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
 
     let data0 = [trace0];
 
-    Plotly.newPlot('myDiv0',data0);
+    Plotly.newPlot('myDiv0',data0, layout);
 
     let trace1 = {
         x: t,
@@ -73,7 +77,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     };
 
     let data1 = [trace1];
-    Plotly.newPlot('myDiv1', data1);
+    Plotly.newPlot('myDiv1', data1, layout);
 }
 
 //UI Elements
@@ -96,7 +100,8 @@ alphaSlider.addEventListener('change', function(event) {
     alpha = Number(alphaSlider.value);
     printVars();
     updateFunction(alpha, m1sliderval, m2sliderval);
-    //keep zoom window
+    //keep zoom window?
+    
 })
 
 m1slider.addEventListener('change', function(event) {
@@ -113,10 +118,4 @@ m2slider.addEventListener('change', function(event) {
 
 updateFunction(alpha, m1sliderval, m2sliderval);
 
-// Slider functions
-//function render() {
-//    let val = document.getElementByID('alphaSlider').value
-    //document.getElementById('curValue').innerHTML = val
-//}
-
-//document.getElementById('waveFormBtn').addEventListener('click',render)
+//message();

@@ -1,3 +1,4 @@
+/* Hex colors from YouTube Dark mode: #383838 #212121 #202020 #181818 */
 /*Text Style*/
 h1 {
   color: white;
@@ -13,8 +14,6 @@ body {
   color: white;
   background-color: #3d3d3d;
 }
-
-
 
 /*Slider Style*/
 .slidecontainer {
@@ -39,7 +38,7 @@ body {
   width: 13px;
   height: 13px;
   border-radius: 50%; 
-  background: #c23a3a;
+  background: #ff3d3d;
   cursor: pointer;
 }
 
@@ -49,3 +48,4 @@ body {
   border-radius: 50%;
   background: #04AA6D;
   cursor: pointer;
+}
