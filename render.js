@@ -11,7 +11,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     const Msun = 0.00000492686088; //mass of the sun using geometric units to get f in Hz
 
     let A = 3.2, //change later to exact calculation
-        deltat = 0.0001,
+        deltat = 0.00001,
         tmax = 3,
         N = tmax / deltat,
         t = new Array(N).fill(0), //probably can define with time steps instead of defining with zeros
@@ -55,20 +55,89 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     console.log(t, v ,phi ,h ,f);
 
     // Move to CSS?
-    let layout = {
+    // let layout = {
+
+    //     title {
+    //         text: 'Plot Title',
+    //         size: 24
+    //     },
+    // };
+    let layout0 ={
+        title: {
+            text: 'Strain vs. Time',
+            font: {
+            family: 'Times New Roman',
+            size: 24,
+            color: 'white'
+            },
+        },
+        xaxis: {
+            title: {
+              text: 'Time',
+              font: {
+                family: 'Courier New, monospace',
+                size: 18,
+                color: 'white'
+                }
+            }
+        },
+        yaxis: {
+            title: {
+              text: 'Strain',
+              font: {
+                family: 'Courier New, monospace',
+                size: 18,
+                color: 'white'
+                }
+            }
+        },
         plot_bgcolor:"#383838",
         paper_bgcolor:"#181818"
-    };
+    }
+
+    let layout1 ={
+        title: {
+            text: 'Frequency vs. Time',
+            font: {
+            family: 'Times New Roman',
+            size: 24,
+            color: 'white'
+            },
+        },
+        xaxis: {
+            title: {
+              text: 'Time',
+              font: {
+                family: 'Courier New, monospace',
+                size: 18,
+                color: 'white'
+                }
+            }
+        },
+        yaxis: {
+            title: {
+              text: 'Frequency',
+              font: {
+                family: 'Courier New, monospace',
+                size: 18,
+                color: 'white'
+                }
+            }
+        },
+        plot_bgcolor:"#383838",
+        paper_bgcolor:"#181818"
+    }
 
     let trace0 = {
         x: t,
         y: h,
+        name: "Strain vs. Time",
         type: 'scatter'
     };
 
     let data0 = [trace0];
 
-    Plotly.newPlot('myDiv0',data0, layout);
+    Plotly.newPlot('myDiv0',data0, layout0);
 
     let trace1 = {
         x: t,
@@ -77,7 +146,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     };
 
     let data1 = [trace1];
-    Plotly.newPlot('myDiv1', data1, layout);
+    Plotly.newPlot('myDiv1', data1, layout1);
 }
 
 //UI Elements
