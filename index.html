@@ -32,15 +32,15 @@
     <a href="http://soundsofspacetime.org"><h2>Sounds of Spacetime</h2></a>
     
     <label for="alphaSlider"><b>Alpha-</b></label>
-    <input type="range" min="0" max="1" value="0" class="slider" step="0.1" oninput="this.nextElementSibling.value = this.value"> 
-    <output>0</output><br>
+    <input type="range" min="0" max="1" value="0" class="slider" step="0.01" id="alphaSlider" oninput="this.nextElementSibling.value = this.value"> 
+    <output></output><br>
 
-    <label for="m1Slider"><b>Mass 1</b></label>
-    <input type="range" min="0" max="10" value="1" class="slider" oninput="this.nextElementSibling.value = this.value"> 
+    <label for="m1slider"><b>Mass 1</b></label>
+    <input type="range" min="0" max="10" value="1" class="slider" step="0.1" id="m1slider" oninput="this.nextElementSibling.value = this.value"> 
     <output>1</output><br>
     
-    <label for="m2Slider"><b>Mass 2</b></label>
-    <input type="range" min="0" max="10" value="1" class="slider" oninput="this.nextElementSibling.value = this.value"> 
+    <label for="m2slider"><b>Mass 2</b></label>
+    <input type="range" min="0" max="10" value="1" step="0.1" class="slider" id="m2slider" oninput="this.nextElementSibling.value = this.value"> 
     <output>1</output><br>
     
     <h3 id="curValue"></h3>
