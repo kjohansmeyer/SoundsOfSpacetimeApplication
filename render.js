@@ -5,13 +5,13 @@
 //=============================================================================//
 // ----------------------------- Update function ----------------------------- //
 //=============================================================================//
-
+// This entire function updates every time a slider is changed
 function updateFunction(alpha, m1sliderval, m2sliderval) {
     // ----------------------------- Defining Variables ----------------------------- //
     const Msun = 0.00000492686088; //mass of the sun using geometric units to get f in Hz
 
-    let A = 1.343797621, //change later to exact calculation
-        deltat = 0.00001,
+    //let A = 1.343797621, //change later to exact calculation
+    let deltat = 0.0001,
         tmax = 3,
         N = tmax / deltat,
         t = new Array(N).fill(0), //probably can define with time steps instead of defining with zeros
@@ -42,11 +42,25 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     for (let n = 0; n < N; n++) {
         v[n] = Math.pow((256 / 5) * (eta / M) * (tc - t[n]), -1 / 8); //Solution to dv/dt = 32/5 (eta/M) v^9
         phi[n] = phic - (1 / 5) * Math.pow(5 / eta, 3 / 8) * Math.pow((tc - t[n]) / M, 5 / 8); //Solution to dphi/dt = v^3/M
-
-        h[n] = A * ((Math.pow(v[n], 2)) * Math.sin(2 * phi[n]) + alpha * (Math.pow(v[n], 3) * Math.sin(3 * phi[n])));
         f[n] = Math.pow(v[n], 3) / (Math.PI * M);
     }
-    console.log({ v }, { phi }, { h }, { f });
+    // filters Not-a-Numbers (NaN's) from v, phi, and f
+    let vFiltered = v.filter(x => x),
+        phiFiltered = phi.filter(x => x),
+        fFiltered = f.filter(x => x);
+    
+    let A = 1/Math.pow(Math.max(...vFiltered),2); // A scales the strain function: A = 1/(vf)^2 which makes -1 < h(t) < 1 when alpha = 0
+
+    for (let n = 0; n < N; n++) {
+        h[n] = A * ((Math.pow(v[n], 2)) * Math.sin(2 * phi[n]) + alpha * (Math.pow(v[n], 3) * Math.sin(3 * phi[n])));
+    }
+    // ---------------------- Filter NaN's from arrays ---------------------- //
+
+    let hFiltered = h.filter(x => x);
+
+    tmax = v.length*deltat;
+
+    console.log({vFiltered}, {phiFiltered}, {hFiltered}, {fFiltered});
 
     // ----------------------------- Plotting ----------------------------- //
     // Strain vs. Time Plot
@@ -67,7 +81,9 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
                     size: 18,
                     color: 'white'
                 }
-            }
+            },
+            color: 'white',
+            rangemode: 'nonnegative'
         },
         yaxis: {
             title: {
@@ -77,7 +93,8 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
                     size: 18,
                     color: 'white'
                 }
-            }
+            },
+            color: 'white',
         },
         plot_bgcolor: "#383838",
         paper_bgcolor: "#181818"
@@ -85,7 +102,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
 
     let trace0 = {
         x: t,
-        y: h,
+        y: hFiltered,
         name: "Strain vs. Time",
         type: 'scatter'
     };
@@ -112,7 +129,8 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
                     size: 18,
                     color: 'white'
                 }
-            }
+            },
+            color: 'white'
         },
         yaxis: {
             title: {
@@ -122,7 +140,8 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
                     size: 18,
                     color: 'white'
                 }
-            }
+            },
+            color: 'white'
         },
         plot_bgcolor: "#383838",
         paper_bgcolor: "#181818"
@@ -130,12 +149,12 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
 
     let trace1 = {
         x: t,
-        y: f,
+        y: fFiltered,
         type: 'scatter'
     };
 
     let data1 = [trace1];
-    Plotly.newPlot('frequencyVsTimePlot', data1, layout1);
+    Plotly.newPlot('frequencyVsTimePlot', data1, layout1, {scrollZoom: true});
 }
 
 // ----------------------------- UI Elements ----------------------------- //
