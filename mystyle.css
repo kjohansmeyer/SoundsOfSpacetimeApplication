@@ -1,5 +1,6 @@
-/* Hex colors from YouTube Dark mode: #383838 #212121 #202020 #181818 */
-/*Text Style*/
+/* Hex colors (light to dark): #383838 #212121 #202020 #181818 */
+
+/* ----------------------------- Text Style ----------------------------- */
 h1 {
   color: white;
   font-family: "Lucida Handwriting","Arial"; /*remove font-families?*/
@@ -15,7 +16,7 @@ body {
   background-color: #3d3d3d;
 }
 
-/*Slider Style*/
+/* ----------------------------- Slider Style ----------------------------- */
 .slidecontainer {
   width: 100%;
 }
