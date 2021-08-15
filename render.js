@@ -12,7 +12,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
 
     //let A = 1.343797621, //change later to exact calculation
     let deltat = 0.0001,
-        tmax = 3,
+        tmax = 10,
         N = tmax / deltat,
         t = new Array(N).fill(0), //probably can define with time steps instead of defining with zeros
         f = new Array(N).fill(0), //change this out for faster method? f = new Array(N); for (let i=0; i<n; ++i a[i]=0;
@@ -45,20 +45,20 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         f[n] = Math.pow(v[n], 3) / (Math.PI * M);
     }
     // filters Not-a-Numbers (NaN's) from v, phi, and f
+    // Citation: https://www.codegrepper.com/code-examples/javascript/js+remove+all+NaN+string+from+array
     let vFiltered = v.filter(x => x),
         phiFiltered = phi.filter(x => x),
         fFiltered = f.filter(x => x);
     
     let A = 1/Math.pow(Math.max(...vFiltered),2); // A scales the strain function: A = 1/(vf)^2 which makes -1 < h(t) < 1 when alpha = 0
 
+    // h(t) is calculated separate since it depends on A, which depends on the final frequency
     for (let n = 0; n < N; n++) {
         h[n] = A * ((Math.pow(v[n], 2)) * Math.sin(2 * phi[n]) + alpha * (Math.pow(v[n], 3) * Math.sin(3 * phi[n])));
     }
-    // ---------------------- Filter NaN's from arrays ---------------------- //
-
     let hFiltered = h.filter(x => x);
 
-    tmax = v.length*deltat;
+    // t_f = v.length*deltat; can be calculated analytically using t_f = t[0] + (5/256)*(M/eta)*(1/(v[0])^8 + 1/(vf)^8))
 
     console.log({vFiltered}, {phiFiltered}, {hFiltered}, {fFiltered});
 
@@ -156,7 +156,33 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     let data1 = [trace1];
     Plotly.newPlot('frequencyVsTimePlot', data1, layout1, {scrollZoom: true});
 }
+//=============================================================================//
+// ------------------------- Button Press/Play Audio ------------------------- //
+//=============================================================================//
+// function buttonPress() {
+//     //Citation: https://stackoverflow.com/questions/6343450/generating-sound-on-the-fly-with-javascript-html5
+//     //one context per document
+//     var context = new (window.AudioContext || window.webkitAudioContext)();
+//     var osc = context.createOscillator(); // instantiate an oscillator
+//     osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
+//     osc.frequency.value = 440; // Hz
+//     osc.connect(context.destination); // connect it to the destination
+//     osc.start(); // start the oscillator
+//     osc.stop(context.currentTime + 2); // stop 2 seconds after the current time
+//     //setInterval(function(){ alert("Hello"); }, 3000);
+// }
+//=============================================================================//
+// ------------------------- Button Press/Play Audio ------------------------- //
+//=============================================================================//
+// function buttonPress() {
+//     var whiteNoise = new Pizzicato.Sound(function(e) {
 
+//         var output = e.outputBuffer.getChannelData(0);
+//         for (var i = 0; i < e.outputBuffer.length; i++)
+//             output[i] = Math.sin();
+//     });
+
+// }
 // ----------------------------- UI Elements ----------------------------- //
 const alphaSlider = document.getElementById("alphaSlider");
 const m1slider = document.getElementById("m1slider");
@@ -171,8 +197,9 @@ console.log({ alpha }, { m1sliderval }, { m2sliderval });
 // ----------------------------- Debug ----------------------------- //
 function printVars() {
     console.log({ alpha }, { m1sliderval }, { m2sliderval });
-}
 
+}
+// ----------------------------- Update Slider Values ----------------------------- //
 alphaSlider.addEventListener('change', function (event) {
     alpha = Number(alphaSlider.value);
     printVars();
@@ -192,5 +219,5 @@ m2slider.addEventListener('change', function (event) {
     printVars();
     updateFunction(alpha, m1sliderval, m2sliderval);
 })
-
+// ----------------------------- Execute update Function for initial time ----------------------------- //
 updateFunction(alpha, m1sliderval, m2sliderval);
