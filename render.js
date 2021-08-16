@@ -2,6 +2,11 @@
 
 'use strict'
 
+// ----------------------------- Slider Debug ----------------------------- //
+function printVars() {
+    console.log({ alpha }, { m1sliderval }, { m2sliderval });
+}
+
 //=============================================================================//
 // ----------------------------- Update function ----------------------------- //
 //=============================================================================//
@@ -155,6 +160,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
 
     let data1 = [trace1];
     Plotly.newPlot('frequencyVsTimePlot', data1, layout1, {scrollZoom: true});
+
 }
 //=============================================================================//
 // ------------------------- Button Press/Play Audio ------------------------- //
@@ -179,10 +185,26 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
 
 //         var output = e.outputBuffer.getChannelData(0);
 //         for (var i = 0; i < e.outputBuffer.length; i++)
-//             output[i] = Math.sin();
+//             output[i] = Math.random();
 //     });
-
+//     whiteNoise.play();
 // }
+let waveSound = new Pizzicato.Sound({ 
+    source: 'wave', 
+    options: {
+        frequency: 440
+    }
+});
+
+function startAudio() {
+    waveSound.play(),
+    printVars();
+}
+
+function stopAudio() {
+    waveSound.stop();
+}
+
 // ----------------------------- UI Elements ----------------------------- //
 const alphaSlider = document.getElementById("alphaSlider");
 const m1slider = document.getElementById("m1slider");
@@ -194,29 +216,26 @@ let alpha = Number(alphaSlider.value),
 
 console.log({ alpha }, { m1sliderval }, { m2sliderval });
 
-// ----------------------------- Debug ----------------------------- //
-function printVars() {
-    console.log({ alpha }, { m1sliderval }, { m2sliderval });
-
-}
 // ----------------------------- Update Slider Values ----------------------------- //
 alphaSlider.addEventListener('change', function (event) {
     alpha = Number(alphaSlider.value);
     printVars();
-    updateFunction(alpha, m1sliderval, m2sliderval);
     //keep zoom window?
-
+    waveSound.stop();
+    updateFunction(alpha, m1sliderval, m2sliderval);
 })
 
 m1slider.addEventListener('change', function (event) {
     m1sliderval = Number(m1slider.value);
     printVars();
+    waveSound.stop();
     updateFunction(alpha, m1sliderval, m2sliderval);
 })
 
 m2slider.addEventListener('change', function (event) {
     m2sliderval = Number(m2slider.value);
     printVars();
+    waveSound.stop();
     updateFunction(alpha, m1sliderval, m2sliderval);
 })
 // ----------------------------- Execute update Function for initial time ----------------------------- //
