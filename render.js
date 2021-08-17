@@ -1,29 +1,46 @@
-//window.alert("Headphones are recommended for the best user experience. Cellphone and laptop may not be able to produce frequencies near or below 90 Hz.");
+//=============================================================================//
+// --------------------------------- Header ---------------------------------- //
+//=============================================================================//
+
+// www.soundsofspacetime.org
+// Created by Kevin Johansmeyer
+// Email: kevinjohansmeyer@gmail.com
+// University: Montclair State University
+
+// Timer needed in order to make page load before alert shows
+//let myTimer = setTimeout(headphoneAlert, 10);
+function headphoneAlert() {
+    window.alert("Headphones are recommended for the best user experience. Cellphone and laptop may not be able to produce frequencies near 90 Hz.");
+}
 
 'use strict'
 
-// ----------------------------- Slider Debug ----------------------------- //
+//=============================================================================//
+// ------------------------------ Slider Debug ------------------------------- //
+//=============================================================================//
 function printVars() {
     console.log({ alpha }, { m1sliderval }, { m2sliderval });
 }
+
+//=============================================================================//
+// ----------------------------- Defining Arrays ----------------------------- //
+//=============================================================================//
+let deltat = 0.0001,
+    tmax = 10,
+    N = tmax / deltat,
+    t = new Array(N).fill(0), //probably can define with time steps instead of defining with zeros
+    f = new Array(N).fill(0), //change this out for faster method? f = new Array(N); for (let i=0; i<n; ++i a[i]=0;
+    h = new Array(N).fill(0),
+    v = new Array(N).fill(0),
+    phi = new Array(N).fill(0);
 
 //=============================================================================//
 // ----------------------------- Update function ----------------------------- //
 //=============================================================================//
 // This entire function updates every time a slider is changed
 function updateFunction(alpha, m1sliderval, m2sliderval) {
-    // ----------------------------- Defining Variables ----------------------------- //
-    const Msun = 0.00000492686088; //mass of the sun using geometric units to get f in Hz
 
-    //let A = 1.343797621, //change later to exact calculation
-    let deltat = 0.0001,
-        tmax = 10,
-        N = tmax / deltat,
-        t = new Array(N).fill(0), //probably can define with time steps instead of defining with zeros
-        f = new Array(N).fill(0), //change this out for faster method? f = new Array(N); for (let i=0; i<n; ++i a[i]=0;
-        h = new Array(N).fill(0),
-        v = new Array(N).fill(0),
-        phi = new Array(N).fill(0);
+    const Msun = 0.00000492686088; //mass of the sun using geometric units to get f in Hz
 
     t[0] = 0;
     for (let i = 1; i < N; i++) {
@@ -37,7 +54,6 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     //initial conditions:
     f[0] = 90;
     v[0] = Math.pow(Math.PI * M * f[0], 1 / 3);
-
 
     // ----------------------------- Calculations ----------------------------- //
     let eta = (m1 * m2) / (M * M), //reduced mass ratio, varies from 0 to 0.25
@@ -63,12 +79,11 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     }
     let hFiltered = h.filter(x => x);
 
-    // t_f = v.length*deltat; can be calculated analytically using t_f = t[0] + (5/256)*(M/eta)*(1/(v[0])^8 + 1/(vf)^8))
-
+    let tstop = hFiltered.length*deltat //can be calculated analytically using t_f = t[0] + (5/256)*(M/eta)*(1/(v[0])^8 + 1/(vf)^8))
     console.log({vFiltered}, {phiFiltered}, {hFiltered}, {fFiltered});
 
     // ----------------------------- Plotting ----------------------------- //
-    // Strain vs. Time Plot
+    // ----------------------- Strain vs. Time Plot ---------------------- //
     let layout0 = {
         title: {
             text: 'Strain vs. Time',
@@ -116,7 +131,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
 
     Plotly.newPlot('strainVsTimePlot', data0, layout0);
     
-    // Frequency vs. Time Plot
+    // ----------------------- Frequency vs. Time Plot ---------------------- //
     let layout1 = {
         title: {
             text: 'Frequency vs. Time',
@@ -161,49 +176,20 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     let data1 = [trace1];
     Plotly.newPlot('frequencyVsTimePlot', data1, layout1, {scrollZoom: true});
 
-}
-//=============================================================================//
-// ------------------------- Button Press/Play Audio ------------------------- //
-//=============================================================================//
-// function buttonPress() {
-//     //Citation: https://stackoverflow.com/questions/6343450/generating-sound-on-the-fly-with-javascript-html5
-//     //one context per document
-//     var context = new (window.AudioContext || window.webkitAudioContext)();
-//     var osc = context.createOscillator(); // instantiate an oscillator
-//     osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
-//     osc.frequency.value = 440; // Hz
-//     osc.connect(context.destination); // connect it to the destination
-//     osc.start(); // start the oscillator
-//     osc.stop(context.currentTime + 2); // stop 2 seconds after the current time
-//     //setInterval(function(){ alert("Hello"); }, 3000);
-// }
-//=============================================================================//
-// ------------------------- Button Press/Play Audio ------------------------- //
-//=============================================================================//
-// function buttonPress() {
-//     var whiteNoise = new Pizzicato.Sound(function(e) {
+    // ----------------------------- Audio ----------------------------- //
+    let audioCtx = new AudioContext();
+    let oscillator = audioCtx.createOscillator();
 
-//         var output = e.outputBuffer.getChannelData(0);
-//         for (var i = 0; i < e.outputBuffer.length; i++)
-//             output[i] = Math.random();
-//     });
-//     whiteNoise.play();
-// }
-let waveSound = new Pizzicato.Sound({ 
-    source: 'wave', 
-    options: {
-        frequency: 440
+    let K = fFiltered.length;
+
+    for (let k = 0; k < K; k++) {
+    setTimeout(() => oscillator.frequency.value = fFiltered[k], k*deltat*1000);
     }
-});
+    oscillator.connect(audioCtx.destination);
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + tstop);
 
-function startAudio() {
-    waveSound.play(),
-    printVars();
-}
-
-function stopAudio() {
-    waveSound.stop();
-}
+} // ----------------------- End of Update Function ---------------------- //
 
 // ----------------------------- UI Elements ----------------------------- //
 const alphaSlider = document.getElementById("alphaSlider");
@@ -221,21 +207,19 @@ alphaSlider.addEventListener('change', function (event) {
     alpha = Number(alphaSlider.value);
     printVars();
     //keep zoom window?
-    waveSound.stop();
+    //waveSound.stop(); //does not work because waveSound is in function
     updateFunction(alpha, m1sliderval, m2sliderval);
 })
 
 m1slider.addEventListener('change', function (event) {
     m1sliderval = Number(m1slider.value);
     printVars();
-    waveSound.stop();
     updateFunction(alpha, m1sliderval, m2sliderval);
 })
 
 m2slider.addEventListener('change', function (event) {
     m2sliderval = Number(m2slider.value);
     printVars();
-    waveSound.stop();
     updateFunction(alpha, m1sliderval, m2sliderval);
 })
 // ----------------------------- Execute update Function for initial time ----------------------------- //

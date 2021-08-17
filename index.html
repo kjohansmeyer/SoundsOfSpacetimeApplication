@@ -21,11 +21,7 @@
   <link rel="stylesheet" href="mystyle.css">
 
   <!-- Plotly.js (Plotting Library)-->
-  <script src ="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
-  <!-- Pizzicato.js (Audio Library) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzicato/0.6.4/Pizzicato.js"></script>
-    
+  <script src ="https://cdn.plot.ly/plotly-latest.min.js"></script>  
 </head>
 
 <body>
@@ -45,7 +41,8 @@
     <input type="range" min="0" max="10" value="1.4" step="0.1" class="slider" id="m2slider" oninput="this.nextElementSibling.value = this.value"> 
     <output>1.4</output><br>
     
-    <button onclick="startAudio()">Play Waveform</button>
+    <button id='startAudio' onclick="getId(this)">Play Waveform</button>
+    <!-- <button onclick="startAudio()">Play Waveform</button> -->
     <button onclick="stopAudio()">Stop Audio</button> <br><br>
     
     <!-- Draw Plots -->
