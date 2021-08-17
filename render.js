@@ -131,7 +131,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
 
     let data0 = [trace0];
 
-    Plotly.newPlot('strainVsTimePlot', data0, layout0);
+    Plotly.newPlot('strainVsTimePlot', data0, layout0,{modeBarButtonsToRemove: ['autoScale2d','toggleSpikelines','hoverClosestCartesian','hoverCompareCartesian']});
     
     // ----------------------- Frequency vs. Time Plot ---------------------- //
     let layout1 = {
@@ -176,7 +176,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     };
 
     let data1 = [trace1];
-    Plotly.newPlot('frequencyVsTimePlot', data1, layout1); //,{scrollZoom: true});
+    Plotly.newPlot('frequencyVsTimePlot', data1, layout1, {modeBarButtonsToRemove: ['autoScale2d','toggleSpikelines','hoverClosestCartesian','hoverCompareCartesian']}); //,{scrollZoom: true});
     
     // ----------------------------- Audio ----------------------------- //
 
@@ -192,14 +192,12 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         oscillator.connect(audioCtx.destination);
         oscillator.start();
         oscillator.stop(audioCtx.currentTime + tstop);
-        
+
         document.getElementById("stopAudioBtn").onclick = function() {stopAudio()};
         function stopAudio() {
             oscillator.stop();
         }
     }
-
-
 
 } // ----------------------- End of Update Function ---------------------- //
 
