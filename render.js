@@ -118,6 +118,13 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
             color: 'white',
             range: [-Math.max(...hFiltered), Math.max(...hFiltered)] 
         },
+        margin: {
+            l: 100,
+            r: 50,
+            b: 50,
+            t: 75,
+            pad: 4
+          },
         plot_bgcolor: "#383838",
         paper_bgcolor: "#181818"
     }
@@ -165,6 +172,13 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
             },
             color: 'white'
         },
+        margin: {
+            l: 100,
+            r: 50,
+            b: 50,
+            t: 75,
+            pad: 4
+          },
         plot_bgcolor: "#383838",
         paper_bgcolor: "#181818"
     }
@@ -233,5 +247,16 @@ m2slider.addEventListener('change', function (event) {
     printVars();
     updateFunction(alpha, m1sliderval, m2sliderval);
 })
+
+// --------------------------- Side Bar Functionality --------------------------- //
+function openNav() {
+    document.getElementById("mySidebar").style.width = "200px";
+    document.getElementById("main").style.marginLeft = "200px";
+  }
+  
+  function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+  }
 // ------------------ Execute update Function for initial time ------------------ //
 updateFunction(alpha, m1sliderval, m2sliderval);

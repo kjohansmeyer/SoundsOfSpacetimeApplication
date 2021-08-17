@@ -42,34 +42,50 @@
   <body>
       <noscript>You need to enable JavaScript to run this application.</noscript>
       <!-- Text -->
-      <h1>Interactive Gravitational Wave Tool</h1>
-      <a href="http://soundsofspacetime.org" target="_blank"><h2>Sounds of Spacetime</h2></a>
-      
-      <!-- Adjustable Sliders -->
-      <label for="alphaSlider"><b>Alpha-</b></label>
-      <input type="range" min="0" max="1" value="0" class="slider" step="0.01" id="alphaSlider" oninput="this.nextElementSibling.value = this.value"> 
-      <output>0</output><br>
+      <div id="main">
+        <button class="openbtn" onclick="openNav()">&#9776; Open Sidebar</button>
+        <h1>Sounds of Spacetime - Interactive Gravitational Wave Tool</h1>
+        
+        <!-- Citation: https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp -->
+        <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+          <a href="http://soundsofspacetime.org" target="_blank">Sounds of Spacetime</a>
+          <a href="https://www.soundsofspacetime.org/what-are-gws.html" target="_blank">What are Gravitational Waves?</a>
+          <a href="https://www.soundsofspacetime.org/about-gw-sounds.html" target="_blank">About Gravitational Wave Sounds</a>
+          <a href="https://www.soundsofspacetime.org/contributors.html" target="_blank">About</a>
+        </div>
 
-      <label for="m1slider"><b>Mass 1</b></label>
-      <input type="range" min="0" max="10" value="1.4" class="slider" step="0.1" id="m1slider" oninput="this.nextElementSibling.value = this.value"> 
-      <output>1.4</output><br>
+        <!-- Adjustable Sliders -->
+        <label for="alphaSlider"><b>Alpha (spin precession variable) </b></label>
+        <input type="range" min="0" max="1" value="0" class="slider" step="0.01" id="alphaSlider" oninput="this.nextElementSibling.value = this.value"> 
+        <output>0</output><br>
+
+        <label for="m1slider"><b>Mass #1 (in terms of solar masses)</b></label>
+        <input type="range" min="0" max="10" value="1.4" class="slider" step="0.1" id="m1slider" oninput="this.nextElementSibling.value = this.value"> 
+        <output>1.4</output><br>
+        
+        <label for="m2slider"><b>Mass #2 (in terms of solar masses)</b></label>
+        <input type="range" min="0" max="10" value="1.4" step="0.1" class="slider" id="m2slider" oninput="this.nextElementSibling.value = this.value"> 
+        <output>1.4</output><br><br>
+        
+        <button type="button" class="button" id="startAudioBtn">Play Waveform</button>
+        <button type="button" class="button" id="stopAudioBtn">Stop Audio</button>
+        <!-- Implement via https://github.com/mattdiamond/Recorderjs -->
+        <button type="button" class="button" id="saveAudio">Save Audio</button><br><br>
+        
+        <!-- Draw Plots -->
+        <div id="strainVsTimePlot" class="plot"></div><br>
+        <div id="frequencyVsTimePlot" class="plot"></div>
+
+        <img src="Logos.PNG" class="image" alt="MSU LSC & NSF Logos">
+
+        <h4>Functions to add:</h4>
+        <p>- Pause on Play Waveform button</p>
+        <p>- Save audio</p>
+        <p>- Trace out plot along with sound</p>
+        <p>- Sidebar Adjustments</p>
       
-      <label for="m2slider"><b>Mass 2</b></label>
-      <input type="range" min="0" max="10" value="1.4" step="0.1" class="slider" id="m2slider" oninput="this.nextElementSibling.value = this.value"> 
-      <output>1.4</output><br>
-      
-      <!-- Need to fix buttons! -->
-      <button type="button" class="button" id="startAudioBtn">Play Waveform</button>
-      <button type="button" class="button" id="stopAudioBtn">Stop<br>Audio</button><br><br>
-      
-      <!-- Draw Plots -->
-      <div id="strainVsTimePlot" class="plot"></div><br>
-      <div id="frequencyVsTimePlot" class="plot"></div>
-    
-      <a href="https://www.soundsofspacetime.org/what-are-gws.html" target="_blank"><h3>What are Gravitational Waves?</h3></a>
-      <a href="https://www.soundsofspacetime.org/about-gw-sounds.html" target="_blank"><h3>About Gravitational Wave Sounds</h3></a>
-      
-      
+      </div>
     <script src="render.js"></script>
     
   </body>
