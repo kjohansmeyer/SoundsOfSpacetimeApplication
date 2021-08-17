@@ -1,19 +1,20 @@
 //=============================================================================//
 // --------------------------------- Header ---------------------------------- //
 //=============================================================================//
+//                      Created by Kevin Johansmeyer                           //
+//                    Email: kevinjohansmeyer@gmail.com                        //
+//                 University: Montclair State University                      //
+//                        Advisor: Dr. Marc Favata                             //
+//                        www.soundsofspacetime.org                            //
+//=============================================================================//
 
-// www.soundsofspacetime.org
-// Created by Kevin Johansmeyer
-// Email: kevinjohansmeyer@gmail.com
-// University: Montclair State University
+'use strict'
 
 // Timer needed in order to make page load before alert shows
 //let myTimer = setTimeout(headphoneAlert, 10);
 function headphoneAlert() {
-    window.alert("Headphones are recommended for the best user experience. Cellphone and laptop may not be able to produce frequencies near 90 Hz.");
+    window.alert("Headphones are recommended for the best user experience. Cellphone and laptops may not be able to produce frequencies near 90 Hz.");
 }
-
-'use strict'
 
 //=============================================================================//
 // ------------------------------ Slider Debug ------------------------------- //
@@ -53,7 +54,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
 
     //initial conditions:
     f[0] = 90;
-    v[0] = Math.pow(Math.PI * M * f[0], 1 / 3);
+    v[0] = Math.pow(Math.PI * M * f[0], 1/3);
 
     // ----------------------------- Calculations ----------------------------- //
     let eta = (m1 * m2) / (M * M), //reduced mass ratio, varies from 0 to 0.25
@@ -61,8 +62,8 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         tc = t[0] + (5 / 256) * (M / (eta * Math.pow(v[0], 8)));
 
     for (let n = 0; n < N; n++) {
-        v[n] = Math.pow((256 / 5) * (eta / M) * (tc - t[n]), -1 / 8); //Solution to dv/dt = 32/5 (eta/M) v^9
-        phi[n] = phic - (1 / 5) * Math.pow(5 / eta, 3 / 8) * Math.pow((tc - t[n]) / M, 5 / 8); //Solution to dphi/dt = v^3/M
+        v[n] = Math.pow((256/5) * (eta/M) * (tc - t[n]), -1/8); //Solution to dv/dt = 32/5 (eta/M) v^9
+        phi[n] = phic - (1/5) * Math.pow(5/eta, 3/8) * Math.pow((tc - t[n]) / M, 5/8); //Solution to dphi/dt = v^3/M
         f[n] = Math.pow(v[n], 3) / (Math.PI * M);
     }
     // filters Not-a-Numbers (NaN's) from v, phi, and f
@@ -80,7 +81,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     let hFiltered = h.filter(x => x);
 
     let tstop = hFiltered.length*deltat //can be calculated analytically using t_f = t[0] + (5/256)*(M/eta)*(1/(v[0])^8 + 1/(vf)^8))
-    console.log({vFiltered}, {phiFiltered}, {hFiltered}, {fFiltered});
+    //console.log({vFiltered}, {phiFiltered}, {hFiltered}, {fFiltered});
 
     // ----------------------------- Plotting ----------------------------- //
     // ----------------------- Strain vs. Time Plot ---------------------- //
@@ -89,13 +90,13 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
             text: 'Strain vs. Time',
             font: {
                 family: 'Times New Roman',
-                size: 24,
+                size: 32,
                 color: 'white'
             },
         },
         xaxis: {
             title: {
-                text: 'Time',
+                text: 'Time (sec)',
                 font: {
                     family: 'Courier New, monospace',
                     size: 18,
@@ -115,6 +116,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
                 }
             },
             color: 'white',
+            range: [-Math.max(...hFiltered), Math.max(...hFiltered)] 
         },
         plot_bgcolor: "#383838",
         paper_bgcolor: "#181818"
@@ -137,13 +139,13 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
             text: 'Frequency vs. Time',
             font: {
                 family: 'Times New Roman',
-                size: 24,
+                size: 32,
                 color: 'white'
             },
         },
         xaxis: {
             title: {
-                text: 'Time',
+                text: 'Time (sec)',
                 font: {
                     family: 'Courier New, monospace',
                     size: 18,
@@ -174,20 +176,30 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     };
 
     let data1 = [trace1];
-    Plotly.newPlot('frequencyVsTimePlot', data1, layout1, {scrollZoom: true});
-
+    Plotly.newPlot('frequencyVsTimePlot', data1, layout1); //,{scrollZoom: true});
+    
     // ----------------------------- Audio ----------------------------- //
-    let audioCtx = new AudioContext();
-    let oscillator = audioCtx.createOscillator();
 
-    let K = fFiltered.length;
-
-    for (let k = 0; k < K; k++) {
-    setTimeout(() => oscillator.frequency.value = fFiltered[k], k*deltat*1000);
+    document.getElementById("startAudioBtn").onclick = function() {startAudio()};
+    function startAudio() {
+        //Citation: https://teropa.info/blog/2016/08/10/frequency-and-pitch.html
+        let audioCtx = new AudioContext();
+        let oscillator = audioCtx.createOscillator();
+        let K = fFiltered.length;
+        for (let k = 0; k < K; k++) {
+        setTimeout(() => oscillator.frequency.value = fFiltered[k], k*deltat*1000); //multiplied by 1000 to convert seconds to milliseconds
+        }
+        oscillator.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + tstop);
+        
+        document.getElementById("stopAudioBtn").onclick = function() {stopAudio()};
+        function stopAudio() {
+            oscillator.stop();
+        }
     }
-    oscillator.connect(audioCtx.destination);
-    oscillator.start();
-    oscillator.stop(audioCtx.currentTime + tstop);
+
+
 
 } // ----------------------- End of Update Function ---------------------- //
 
@@ -209,6 +221,7 @@ alphaSlider.addEventListener('change', function (event) {
     //keep zoom window?
     //waveSound.stop(); //does not work because waveSound is in function
     updateFunction(alpha, m1sliderval, m2sliderval);
+    console.log({fFiltered});
 })
 
 m1slider.addEventListener('change', function (event) {
@@ -222,5 +235,5 @@ m2slider.addEventListener('change', function (event) {
     printVars();
     updateFunction(alpha, m1sliderval, m2sliderval);
 })
-// ----------------------------- Execute update Function for initial time ----------------------------- //
+// ------------------ Execute update Function for initial time ------------------ //
 updateFunction(alpha, m1sliderval, m2sliderval);

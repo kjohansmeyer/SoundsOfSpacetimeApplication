@@ -1,57 +1,76 @@
+<!-- 
+//=============================================================================//
+// --------------------------------- Header ---------------------------------- //
+//=============================================================================//
+//                      Created by Kevin Johansmeyer                           //
+//                    Email: kevinjohansmeyer@gmail.com                        //
+//                 University: Montclair State University                      //
+//                        Advisor: Dr. Marc Favata                             //
+//                        www.soundsofspacetime.org                            //
+//=============================================================================// -->
+
+<!-- Required Packages: 
+     - Plotly.js: https://plotly.com/javascript/ [MIT license]
+     - OscillatorNode: https://developer.mozilla.org/en-US/docs/Web/API/OscillatorNode/OscillatorNode -->
 <!doctype html>
 
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- For mobile display -->
 
-  <title>Sounds of Spacetime</title>
-  <meta name="description" content="Our purpose is to explore the physics of gravitational waves via an analogy to audible sounds. Gravitational waves (GW) are ripples in the fabric of spacetime produced by colliding black holes, neutron stars, supernovae, and other astrophysical phenomena.">
-  <meta name="author" content="Kevin Johansmeyer">
-  <meta name="viewport" content="user-scalable=no, width=device-width"/> <!--mobile display -->
-  <meta property="og:title" content="Interactive Gravitational Wave Tool">
-  <meta property="og:type" content="Sounds of Spacetime">
-  <meta property="og:url" content="http://soundsofspacetime.org/">
-  <meta property="og:image" content="image.png">
+    <title>Sounds of Spacetime</title>
+    <meta name="description" content="Our purpose is to explore the physics of gravitational waves via an analogy to audible sounds. Gravitational waves (GW) are ripples in the fabric of spacetime produced by colliding black holes, neutron stars, supernovae, and other astrophysical phenomena.">
+    <meta name="author" content="Kevin Johansmeyer">
+    <meta name="viewport" content="user-scalable=no, width=device-width"/> <!--mobile display -->
+    <meta property="og:title" content="Interactive Gravitational Wave Tool">
+    <meta property="og:type" content="Sounds of Spacetime">
+    <meta property="og:url" content="http://soundsofspacetime.org/">
+    <meta property="og:image" content="image.png">
 
-  <link rel="icon" href="favicon.ico">
-  <!-- <link rel="icon" href="/favicon.svg" type="image/svg+xml"> -->
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" href="favicon.ico">
+    <!-- <link rel="icon" href="/favicon.svg" type="image/svg+xml"> -->
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-  <link rel="stylesheet" href="mystyle.css">
+    <link rel="stylesheet" href="mystyle.css">
 
-  <!-- Plotly.js (Plotting Library)-->
-  <script src ="https://cdn.plot.ly/plotly-latest.min.js"></script>  
-</head>
+    <!-- Plotly.js (Plotting Library) [Keep in <head>] -->
+    <script src ="plotly-latest.min.js"></script> <!-- Refers to local file-->
+    <!-- <script src ="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
+  </head>
 
-<body>
-    <noscript>You need to enable JavaScript to run this application.</noscript>
-    <h1>Interactive Gravitational Wave Tool</h1>
-    <a href="http://soundsofspacetime.org"><h2>Sounds of Spacetime</h2></a>
+  <body>
+      <noscript>You need to enable JavaScript to run this application.</noscript>
+      <!-- Text -->
+      <h1>Interactive Gravitational Wave Tool</h1>
+      <a href="http://soundsofspacetime.org" target="_blank"><h2>Sounds of Spacetime</h2></a>
+      
+      <!-- Adjustable Sliders -->
+      <label for="alphaSlider"><b>Alpha-</b></label>
+      <input type="range" min="0" max="1" value="0" class="slider" step="0.01" id="alphaSlider" oninput="this.nextElementSibling.value = this.value"> 
+      <output>0</output><br>
+
+      <label for="m1slider"><b>Mass 1</b></label>
+      <input type="range" min="0" max="10" value="1.4" class="slider" step="0.1" id="m1slider" oninput="this.nextElementSibling.value = this.value"> 
+      <output>1.4</output><br>
+      
+      <label for="m2slider"><b>Mass 2</b></label>
+      <input type="range" min="0" max="10" value="1.4" step="0.1" class="slider" id="m2slider" oninput="this.nextElementSibling.value = this.value"> 
+      <output>1.4</output><br>
+      
+      <!-- Need to fix buttons! -->
+      <button type="button" id="startAudioBtn">Play Waveform</button>
+      <button type="button" id="stopAudioBtn">StopAudio</button><br><br>
+      
+      <!-- Draw Plots -->
+      <div id="strainVsTimePlot" class="plot"></div><br>
+      <div id="frequencyVsTimePlot" class="plot"></div>
     
-    <label for="alphaSlider"><b>Alpha-</b></label>
-    <input type="range" min="0" max="1" value="0" class="slider" step="0.01" id="alphaSlider" oninput="this.nextElementSibling.value = this.value"> 
-    <output>0</output><br>
-
-    <label for="m1slider"><b>Mass 1</b></label>
-    <input type="range" min="0" max="10" value="1.4" class="slider" step="0.1" id="m1slider" oninput="this.nextElementSibling.value = this.value"> 
-    <output>1.4</output><br>
+      <a href="https://www.soundsofspacetime.org/what-are-gws.html" target="_blank"><h3>What are Gravitational Waves?</h3></a>
+      <a href="https://www.soundsofspacetime.org/about-gw-sounds.html" target="_blank"><h3>About Gravitational Wave Sounds</h3></a>
+      
+      
+    <script src="render.js"></script>
     
-    <label for="m2slider"><b>Mass 2</b></label>
-    <input type="range" min="0" max="10" value="1.4" step="0.1" class="slider" id="m2slider" oninput="this.nextElementSibling.value = this.value"> 
-    <output>1.4</output><br>
-    
-    <button id='startAudio' onclick="getId(this)">Play Waveform</button>
-    <!-- <button onclick="startAudio()">Play Waveform</button> -->
-    <button onclick="stopAudio()">Stop Audio</button> <br><br>
-    
-    <!-- Draw Plots -->
-    <center> <!-- Remove CSS from html -->
-      <div id="strainVsTimePlot" style="width:95%;height:250px;"></div><br>
-      <div id="frequencyVsTimePlot" style="width:95%;height:250px;"></div>
-    </center>
-    
-  <script src="render.js"></script>
-  
-</body>
+  </body>
 </html>
