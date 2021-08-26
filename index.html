@@ -71,19 +71,17 @@
         <button type="button" class="button" id="startAudioBtn">Play Waveform</button>
         <button type="button" class="button" id="stopAudioBtn">Stop Audio</button>
         <!-- Implement via https://github.com/mattdiamond/Recorderjs -->
-        <button type="button" class="button" id="saveAudio">Save Audio</button><br><br>
-        
+        <button type="button" class="button" id="saveAudio">Save Audio</button>
+        <button type="button" class="button" onclick="toggleStrainVsTimePlot()">Toggle Strain Plot</button>
+        <button type="button" class="button" onclick="toggleFrequencyVsTimePlot()">Toggle Frequency Plot</button><br><br>
+
         <!-- Draw Plots -->
         <div id="strainVsTimePlot" class="plot"></div><br>
         <div id="frequencyVsTimePlot" class="plot"></div><br>
 
         <img src="logo.PNG" class="image" alt="MSU NSF & LSC Logos">
 
-        <h4>Functions to add:</h4>
-        <p>- Pause on Play Waveform button</p>
-        <p>- Save audio</p>
-        <p>- Trace out plot along with sound</p>
-        <p>- Sidebar Adjustments</p>
+        <div id="credits">Created by Kevin Johansmeyer as part of Montclair State University and the LIGO Scientific Collaboration</div>
       
       </div>
     <script src="render.js"></script>

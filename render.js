@@ -86,20 +86,13 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     // ----------------------------- Plotting ----------------------------- //
     // ----------------------- Strain vs. Time Plot ---------------------- //
     let layout0 = {
-        title: {
-            text: 'Strain vs. Time',
-            font: {
-                family: 'Times New Roman',
-                size: 32,
-                color: 'white'
-            },
-        },
+        title: {text: 'Strain vs. Time', font: {family: 'Times New Roman', size: 32, color: 'white'}},
         xaxis: {
             title: {
                 text: 'Time (sec)',
                 font: {
-                    family: 'Courier New, monospace',
-                    size: 18,
+                    family: 'Times New Roman',
+                    size: 26,
                     color: 'white'
                 }
             },
@@ -108,23 +101,17 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         },
         yaxis: {
             title: {
-                text: 'Strain',
+                text: 'Normalized Strain',
                 font: {
-                    family: 'Courier New, monospace',
-                    size: 18,
+                    family: 'Times New Roman',
+                    size: 26,
                     color: 'white'
                 }
             },
             color: 'white',
             range: [-Math.max(...hFiltered), Math.max(...hFiltered)] 
         },
-        margin: {
-            l: 100,
-            r: 50,
-            b: 50,
-            t: 75,
-            pad: 4
-          },
+        margin: {l: 100, r: 50, b: 50, t: 75, pad: 4},
         plot_bgcolor: "#383838",
         paper_bgcolor: "#181818"
     }
@@ -133,7 +120,11 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         x: t,
         y: hFiltered,
         name: "Strain vs. Time",
-        type: 'scatter'
+        type: 'scatter',
+        line: {
+            color: 'white',
+            width: 3
+          }
     };
 
     let data0 = [trace0];
@@ -142,43 +133,16 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     
     // ----------------------- Frequency vs. Time Plot ---------------------- //
     let layout1 = {
-        title: {
-            text: 'Frequency vs. Time',
-            font: {
-                family: 'Times New Roman',
-                size: 32,
-                color: 'white'
-            },
-        },
+        title: {text: 'Frequency vs. Time', font: {family: 'Times New Roman', size: 32, color: 'white'}},
         xaxis: {
-            title: {
-                text: 'Time (sec)',
-                font: {
-                    family: 'Courier New, monospace',
-                    size: 18,
-                    color: 'white'
-                }
-            },
+            title: {text: 'Time (sec)', font: {family: 'Times New Roman', size: 26, color: 'white'}},
             color: 'white'
         },
         yaxis: {
-            title: {
-                text: 'Frequency',
-                font: {
-                    family: 'Courier New, monospace',
-                    size: 18,
-                    color: 'white'
-                }
-            },
+            title: {text: 'Frequency', font: {family: 'Times New Roman', size: 26, color: 'white'}},
             color: 'white'
         },
-        margin: {
-            l: 100,
-            r: 50,
-            b: 50,
-            t: 75,
-            pad: 4
-          },
+        margin: {l: 100, r: 50, b: 50, t: 75, pad: 4},
         plot_bgcolor: "#383838",
         paper_bgcolor: "#181818"
     }
@@ -186,7 +150,11 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     let trace1 = {
         x: t,
         y: fFiltered,
-        type: 'scatter'
+        type: 'scatter',
+        line: {
+            color: 'white',
+            width: 3
+          }
     };
 
     let data1 = [trace1];
@@ -258,5 +226,24 @@ function openNav() {
     document.getElementById("mySidebar").style.width = "0";
     document.getElementById("main").style.marginLeft= "0";
   }
+// --------------------------- Toggle Plots --------------------------- //
+//Citation: https://www.w3schools.com/howto/howto_js_toggle_hide_show.asp
+function toggleStrainVsTimePlot() {
+    var x = document.getElementById("strainVsTimePlot");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+  }
+
+function toggleFrequencyVsTimePlot() {
+    var x = document.getElementById("frequencyVsTimePlot");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
 // ------------------ Execute update Function for initial time ------------------ //
 updateFunction(alpha, m1sliderval, m2sliderval);

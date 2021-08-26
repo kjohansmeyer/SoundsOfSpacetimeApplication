@@ -158,3 +158,15 @@ body {
   .sidebar {padding-top: 15px;}
   .sidebar a {font-size: 18px;}
 }
+
+/* -------------------------------- Bottom Bar ------------------------------- */
+#credits { 
+  text-align: center;
+  height: 20px; 
+  position: fixed; 
+  bottom:0%;
+  width:100%;
+  background-color: #181818; 
+  opacity: 1;
+  margin-left:-1.5%; /* removes indent */
+}
