@@ -39,7 +39,7 @@ let deltat = 0.0001,
 // ----------------------------- Update function ----------------------------- //
 //=============================================================================//
 // This entire function updates every time a slider is changed
-function updateFunction(alpha, m1sliderval, m2sliderval) {
+function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
 
     const Msun = 0.00000492686088; //mass of the sun using geometric units to get f in Hz
 
@@ -51,9 +51,21 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     let m1 = m1sliderval * Msun,
         m2 = m2sliderval * Msun,
         M = (m1 + m2);
+    
+    // Selected device determines the starting frequency
+    // Citation: https://stackoverflow.com/questions/1085801/get-selected-value-in-dropdown-list-using-javascript
+    var selection = document.getElementById("selectDevice");
+    var strSelection = selection.options[selection.selectedIndex].text;
+    console.log(strSelection);
 
-    //initial conditions:
-    f[0] = 90;
+    // Initial conditions:
+    if (strSelection == 'Laptop') {
+        f[0] = 120; //Hertz
+    } else if (strSelection == 'Headphones') {
+        f[0] = 40; //Hertz
+    } else if (strSelection == 'Subwoofer') {
+        f[0] = 40; //Hertz
+    }
     v[0] = Math.pow(Math.PI * M * f[0], 1/3);
 
     // ----------------------------- Calculations ----------------------------- //
@@ -187,10 +199,12 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
 const alphaSlider = document.getElementById("alphaSlider");
 const m1slider = document.getElementById("m1slider");
 const m2slider = document.getElementById("m2slider");
+const selectDevice = document.getElementById("selectDevice");
 
 let alpha = Number(alphaSlider.value),
     m1sliderval = Number(m1slider.value),
-    m2sliderval = Number(m2slider.value);
+    m2sliderval = Number(m2slider.value),
+    deviceSelection = new String("Laptop");
 
 console.log({ alpha }, { m1sliderval }, { m2sliderval });
 
@@ -198,22 +212,26 @@ console.log({ alpha }, { m1sliderval }, { m2sliderval });
 alphaSlider.addEventListener('change', function (event) {
     alpha = Number(alphaSlider.value);
     printVars();
-    //keep zoom window?
     //waveSound.stop(); //does not work because waveSound is in function
-    updateFunction(alpha, m1sliderval, m2sliderval);
-    console.log({fFiltered});
+    updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection);
 })
 
 m1slider.addEventListener('change', function (event) {
     m1sliderval = Number(m1slider.value);
     printVars();
-    updateFunction(alpha, m1sliderval, m2sliderval);
+    updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection);
 })
 
 m2slider.addEventListener('change', function (event) {
     m2sliderval = Number(m2slider.value);
     printVars();
-    updateFunction(alpha, m1sliderval, m2sliderval);
+    updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection);
+})
+
+selectDevice.addEventListener('change', function (event) {
+    deviceSelection = Number(m2slider.value);
+    printVars();
+    updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection);
 })
 
 // --------------------------- Side Bar Functionality --------------------------- //
@@ -246,4 +264,4 @@ function toggleFrequencyVsTimePlot() {
     }
 }
 // ------------------ Execute update Function for initial time ------------------ //
-updateFunction(alpha, m1sliderval, m2sliderval);
+updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection);

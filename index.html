@@ -67,18 +67,29 @@
         <label for="m2slider"><b>Mass #2 (in terms of solar masses)</b></label>
         <input type="range" min="0" max="10" value="1.4" step="0.1" class="slider" id="m2slider" oninput="this.nextElementSibling.value = this.value"> 
         <output>1.4</output><br><br>
+
+        <!-- Select Device -->
+        <!-- Citation: https://www.w3schools.com/tags/tag_select.asp -->
+        <label for="selectDevice">Choose a device:</label>
+        <select name="selectDevice" id="selectDevice">
+          <option value="laptop">Laptop</option>
+          <option value="headphones">Headphones</option>
+          <option value="subwoofer">Subwoofer</option>
+        </select>
         
+        <!-- Buttons -->
         <button type="button" class="button" id="startAudioBtn">Play Waveform</button>
         <button type="button" class="button" id="stopAudioBtn">Stop Audio</button>
         <!-- Implement via https://github.com/mattdiamond/Recorderjs -->
         <button type="button" class="button" id="saveAudio">Save Audio</button>
         <button type="button" class="button" onclick="toggleStrainVsTimePlot()">Toggle Strain Plot</button>
         <button type="button" class="button" onclick="toggleFrequencyVsTimePlot()">Toggle Frequency Plot</button><br><br>
-
+        
         <!-- Draw Plots -->
         <div id="strainVsTimePlot" class="plot"></div><br>
         <div id="frequencyVsTimePlot" class="plot"></div><br>
-
+        
+        <!-- Bottom Images -->
         <img src="logo.PNG" class="image" alt="MSU NSF & LSC Logos">
 
         <div id="credits">Created by Kevin Johansmeyer as part of Montclair State University and the LIGO Scientific Collaboration</div>
