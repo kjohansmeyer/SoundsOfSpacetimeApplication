@@ -109,7 +109,8 @@ function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
                 }
             },
             color: 'white',
-            rangemode: 'nonnegative'
+            rangemode: 'nonnegative',
+            showgrid: false
         },
         yaxis: {
             title: {
@@ -121,6 +122,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
                 }
             },
             color: 'white',
+            showgrid: false,
             range: [-Math.max(...hFiltered), Math.max(...hFiltered)] 
         },
         margin: {l: 100, r: 50, b: 50, t: 75, pad: 4},
@@ -148,11 +150,13 @@ function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
         title: {text: 'Frequency vs. Time', font: {family: 'Times New Roman', size: 32, color: 'white'}},
         xaxis: {
             title: {text: 'Time (sec)', font: {family: 'Times New Roman', size: 26, color: 'white'}},
-            color: 'white'
+            color: 'white',
+            showgrid: false
         },
         yaxis: {
             title: {text: 'Frequency', font: {family: 'Times New Roman', size: 26, color: 'white'}},
-            color: 'white'
+            color: 'white',
+            showgrid: false
         },
         margin: {l: 100, r: 50, b: 50, t: 75, pad: 4},
         plot_bgcolor: "#383838",
@@ -177,6 +181,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
     document.getElementById("startAudioBtn").onclick = function() {startAudio()};
     function startAudio() {
         //Citation: https://teropa.info/blog/2016/08/10/frequency-and-pitch.html
+        // Need to incorporate volume/gain: https://teropa.info/blog/2016/08/30/amplitude-and-loudness.html
         let audioCtx = new AudioContext();
         let oscillator = audioCtx.createOscillator();
         let K = fFiltered.length;
@@ -265,3 +270,19 @@ function toggleFrequencyVsTimePlot() {
 }
 // ------------------ Execute update Function for initial time ------------------ //
 updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection);
+
+/* 
+Things that need to be added or updated:
+- Fix NaN problem
+- Fix volume problem
+- Stop sound when sliders are changed
+- Stop sound when button is pressed again
+- Put box around plots with tick marks?
+- Pick deltat more carefully (based on sliders)
+- Change masses 1-100 solar masses
+- Separate images?
+- Check mobile view
+
+Other: 
+- Look at Ghosh Python code
+*/
