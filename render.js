@@ -141,9 +141,20 @@ function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
           }
     };
 
+    var config0 = {
+        toImageButtonOptions: {
+          format: 'png', // one of png, svg, jpeg, webp
+          filename: 'GWStrainVsTimePlot',
+          height: 500,
+          width: 1754,
+          scale: 2 // Multiply title/legend/axis/canvas sizes by this factor
+        },
+        modeBarButtonsToRemove: ['autoScale2d','toggleSpikelines','hoverClosestCartesian','hoverCompareCartesian']
+    };
+
     let data0 = [trace0];
 
-    Plotly.newPlot('strainVsTimePlot', data0, layout0,{modeBarButtonsToRemove: ['autoScale2d','toggleSpikelines','hoverClosestCartesian','hoverCompareCartesian']});
+    Plotly.newPlot('strainVsTimePlot', data0, layout0, config0);
     
     // ----------------------- Frequency vs. Time Plot ---------------------- //
     let layout1 = {
@@ -173,8 +184,19 @@ function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
           }
     };
 
+    var config1 = {
+        toImageButtonOptions: {
+          format: 'png', // one of png, svg, jpeg, webp
+          filename: 'GWFrequencyVsTimePlot',
+          height: 500,
+          width: 1754,
+          scale: 2 // Multiply title/legend/axis/canvas sizes by this factor
+        },
+        modeBarButtonsToRemove: ['autoScale2d','toggleSpikelines','hoverClosestCartesian','hoverCompareCartesian']
+    };
+
     let data1 = [trace1];
-    Plotly.newPlot('frequencyVsTimePlot', data1, layout1, {modeBarButtonsToRemove: ['autoScale2d','toggleSpikelines','hoverClosestCartesian','hoverCompareCartesian']}); //,{scrollZoom: true});
+    Plotly.newPlot('frequencyVsTimePlot', data1, layout1, config1, {modeBarButtonsToRemove: ['autoScale2d','toggleSpikelines','hoverClosestCartesian','hoverCompareCartesian']});
     
     // ----------------------------- Audio ----------------------------- //
 
@@ -184,10 +206,12 @@ function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
         // Need to incorporate volume/gain: https://teropa.info/blog/2016/08/30/amplitude-and-loudness.html
         let audioCtx = new AudioContext();
         let oscillator = audioCtx.createOscillator();
+        let gain = audioCtx.createGain(); //this doesn't work
         let K = fFiltered.length;
         for (let k = 0; k < K; k++) {
         setTimeout(() => oscillator.frequency.value = fFiltered[k], k*deltat*1000); //multiplied by 1000 to convert seconds to milliseconds
-        }
+        setTimeout(() => gain.gain.value = 3*hFiltered[k], k*deltat*1000); //this doesn't work
+    }
         oscillator.connect(audioCtx.destination);
         oscillator.start();
         oscillator.stop(audioCtx.currentTime + tstop);
@@ -283,6 +307,10 @@ Things that need to be added or updated:
 - Separate images?
 - Check mobile view
 
+Things that have been fixed:
+- Plot download size, resolution, and file name
+
 Other: 
 - Look at Ghosh Python code
+- GW assignments and readings
 */
