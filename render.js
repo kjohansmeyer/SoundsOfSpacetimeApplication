@@ -29,11 +29,11 @@ function printVars() {
 let deltat = 0.0001,
     tmax = 10,
     N = tmax / deltat,
-    t = new Array(N).fill(0), //probably can define with time steps instead of defining with zeros
-    f = new Array(N).fill(0), //change this out for faster method? f = new Array(N); for (let i=0; i<n; ++i a[i]=0;
-    h = new Array(N).fill(0),
-    v = new Array(N).fill(0),
-    phi = new Array(N).fill(0);
+    t = new Float32Array(N).fill(0), //probably can define with time steps instead of defining with zeros
+    f = new Float32Array(N).fill(0), //change this out for faster method? f = new Array(N); for (let i=0; i<n; ++i a[i]=0;
+    h = new Float32Array(N).fill(0),
+    v = new Float32Array(N).fill(0),
+    phi = new Float32Array(N).fill(0);
 
 //=============================================================================//
 // ----------------------------- Update function ----------------------------- //
@@ -199,27 +199,27 @@ function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
     Plotly.newPlot('frequencyVsTimePlot', data1, layout1, config1, {modeBarButtonsToRemove: ['autoScale2d','toggleSpikelines','hoverClosestCartesian','hoverCompareCartesian']});
     
     // ----------------------------- Audio ----------------------------- //
+    document.getElementById("startAudioBtn").onclick = function() {playAudio()};
 
-    document.getElementById("startAudioBtn").onclick = function() {startAudio()};
-    function startAudio() {
-        //Citation: https://teropa.info/blog/2016/08/10/frequency-and-pitch.html
-        // Need to incorporate volume/gain: https://teropa.info/blog/2016/08/30/amplitude-and-loudness.html
-        let audioCtx = new AudioContext();
-        let oscillator = audioCtx.createOscillator();
-        let gain = audioCtx.createGain(); //this doesn't work
-        let K = fFiltered.length;
-        for (let k = 0; k < K; k++) {
-        setTimeout(() => oscillator.frequency.value = fFiltered[k], k*deltat*1000); //multiplied by 1000 to convert seconds to milliseconds
-        setTimeout(() => gain.gain.value = hFiltered[k], k*deltat*1000); //this doesn't work
-    }
-        oscillator.connect(audioCtx.destination);
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + tstop);
+    // Citation: https://darthvanger.medium.com/synthesize-sound-with-javascript-sine-wave-940f9cd7dae2
+    const sampleRate = 1/deltat;
 
-        document.getElementById("stopAudioBtn").onclick = function() {stopAudio()};
-        function stopAudio() {
-            oscillator.stop();
+    function startAudio({ array, sampleRate }) {
+        // We have to start with creating AudioContext
+        const audioContext = new AudioContext({sampleRate});
+        // create audio buffer of the same length as our array
+        const audioBuffer = audioContext.createBuffer(1, array.length, sampleRate);
+        // this copies our sine wave to the audio buffer
+        audioBuffer.copyToChannel(array, 0);
+        // some JavaScript magic to actually play the sound
+        const source = audioContext.createBufferSource();
+        source.connect(audioContext.destination);
+        source.buffer = audioBuffer;
+        source.start();
         }
+
+    function playAudio() {
+        startAudio({ array: hFiltered, sampleRate });
     }
 
 } // ----------------------- End of Update Function ---------------------- //
@@ -298,7 +298,6 @@ updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection);
 /* 
 Things that need to be added or updated:
 - Fix NaN problem
-- Fix volume problem
 - Stop sound when sliders are changed
 - Stop sound when button is pressed again
 - Put box around plots with tick marks?
@@ -313,5 +312,6 @@ Other:
 
 Things that have been fixed:
 - Plot download size, resolution, and file name
+- Completely new sound programming
 - Changed plot colors (may need tweaking) [maybe add drop down menu for dark/light mode?]
 */
