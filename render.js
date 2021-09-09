@@ -126,7 +126,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
             range: [-Math.max(...hFiltered), Math.max(...hFiltered)] 
         },
         margin: {l: 100, r: 50, b: 50, t: 75, pad: 4},
-        plot_bgcolor: "#383838",
+        plot_bgcolor: 'white', //"#383838",
         paper_bgcolor: "#181818"
     }
 
@@ -136,7 +136,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
         name: "Strain vs. Time",
         type: 'scatter',
         line: {
-            color: 'white',
+            color: '#282828', //'white',
             width: 3
           }
     };
@@ -170,7 +170,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
             showgrid: false
         },
         margin: {l: 100, r: 50, b: 50, t: 75, pad: 4},
-        plot_bgcolor: "#383838",
+        plot_bgcolor: 'white', //"#383838",
         paper_bgcolor: "#181818"
     }
 
@@ -179,7 +179,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
         y: fFiltered,
         type: 'scatter',
         line: {
-            color: 'white',
+            color: '#282828', //'white',
             width: 3
           }
     };
@@ -210,7 +210,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
         let K = fFiltered.length;
         for (let k = 0; k < K; k++) {
         setTimeout(() => oscillator.frequency.value = fFiltered[k], k*deltat*1000); //multiplied by 1000 to convert seconds to milliseconds
-        setTimeout(() => gain.gain.value = 3*hFiltered[k], k*deltat*1000); //this doesn't work
+        setTimeout(() => gain.gain.value = hFiltered[k], k*deltat*1000); //this doesn't work
     }
         oscillator.connect(audioCtx.destination);
         oscillator.start();
@@ -307,10 +307,11 @@ Things that need to be added or updated:
 - Separate images?
 - Check mobile view
 
-Things that have been fixed:
-- Plot download size, resolution, and file name
-
 Other: 
 - Look at Ghosh Python code
 - GW assignments and readings
+
+Things that have been fixed:
+- Plot download size, resolution, and file name
+- Changed plot colors (may need tweaking) [maybe add drop down menu for dark/light mode?]
 */
