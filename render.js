@@ -39,7 +39,7 @@ let deltat = 0.0001,
 // ----------------------------- Update function ----------------------------- //
 //=============================================================================//
 // This entire function updates every time a slider is changed
-function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
+function updateFunction(alpha, m1sliderval, m2sliderval) {
 
     const Msun = 0.00000492686088; //mass of the sun using geometric units to get f in Hz
 
@@ -52,18 +52,32 @@ function updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection) {
         m2 = m2sliderval * Msun,
         M = (m1 + m2);
     
+    // This doesn't work yet
+    // var eventSelection = document.getElementById("selectEvent");
+    // var strEventSelection = eventSelection.options[eventSelection.selectedIndex].text;
+    // var infoBox = document.getElementById("selectEvent");
+    // if (strEventSelection == 'Basic Binaries') {
+    //     infoBox.innerHTML = "Basic Binaries";
+    // } else if (strEventSelection == 'Circular Binaries') {
+    //     infoBox.innerHTML = "Circular Binaries";
+    // } else if (strEventSelection == 'Spinning Binaries') {
+    //     infoBox.innerHTML = "Spinning Binaries";
+    // } else if (strEventSelection == 'Elliptical Binaries') {
+    //     infoBox.innerHTML = "Elliptical Binaries";
+    // }
+
     // Selected device determines the starting frequency
     // Citation: https://stackoverflow.com/questions/1085801/get-selected-value-in-dropdown-list-using-javascript
-    var selection = document.getElementById("selectDevice");
-    var strSelection = selection.options[selection.selectedIndex].text;
-    console.log(strSelection);
+    var deviceSelection = document.getElementById("selectDevice");
+    var strDeviceSelection = deviceSelection.options[deviceSelection.selectedIndex].text;
+    console.log(strDeviceSelection);
 
     // Initial conditions:
-    if (strSelection == 'Laptop') {
+    if (strDeviceSelection == 'Laptop') {
         f[0] = 120; //Hertz
-    } else if (strSelection == 'Headphones') {
+    } else if (strDeviceSelection == 'Headphones') {
         f[0] = 40; //Hertz
-    } else if (strSelection == 'Subwoofer') {
+    } else if (strDeviceSelection == 'Subwoofer') {
         f[0] = 40; //Hertz
     }
     v[0] = Math.pow(Math.PI * M * f[0], 1/3);
