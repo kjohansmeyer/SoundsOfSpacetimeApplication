@@ -61,12 +61,12 @@
         <output>0</output><br>
 
         <label for="m1slider"><b>Mass #1 (in terms of solar masses)</b></label>
-        <input type="range" min="0" max="10" value="1.4" class="slider" step="0.1" id="m1slider" oninput="this.nextElementSibling.value = this.value"> 
-        <output>1.4</output><br>
+        <input type="range" min="1" max="10" value="3.5" class="slider" step="0.1" id="m1slider" oninput="this.nextElementSibling.value = this.value"> 
+        <output>3.5</output><br>
         
         <label for="m2slider"><b>Mass #2 (in terms of solar masses)</b></label>
-        <input type="range" min="0" max="10" value="1.4" step="0.1" class="slider" id="m2slider" oninput="this.nextElementSibling.value = this.value"> 
-        <output>1.4</output><br><br>
+        <input type="range" min="1" max="10" value="3.5" step="0.1" class="slider" id="m2slider" oninput="this.nextElementSibling.value = this.value"> 
+        <output>3.5</output><br><br>
 
         <!-- Select Device -->
         <!-- Citation: https://www.w3schools.com/tags/tag_select.asp -->
@@ -79,10 +79,12 @@
         
         <!-- Theme -->
         <!-- Citation: https://www.w3schools.com/tags/tag_select.asp -->
-        <label for="selectTheme">Theme:</label>
-        <select name="selectDevice" id="selectTheme">
-          <option value="Dark">Dark</option>
-          <option value="Light">Light</option>
+        <label for="selectEvent">Type of Event:</label>
+        <select name="selectEvent" id="selectEvent">
+          <option value="basicBinaries">Basic Binaries</option>
+          <option value="circularBinaries">Circular Binaries</option>
+          <option value="spinningBinaries">Spinning Binaries</option>
+          <option value="ellipticalBinaries">Elliptical Binaries</option>
         </select>
         
         <!-- Buttons -->
@@ -92,6 +94,14 @@
         <button type="button" class="button" id="saveAudio">Save Audio</button>
         <button type="button" class="button" onclick="toggleStrainVsTimePlot()">Toggle Strain Plot</button>
         <button type="button" class="button" onclick="toggleFrequencyVsTimePlot()">Toggle Frequency Plot</button><br><br>
+
+        <!-- Explanation Box -->
+        <!-- Citation: https://www.thesitewizard.com/css/rectangular-box-border.shtml -->
+        <!-- Might Need: https://stackoverflow.com/questions/1085801/get-selected-value-in-dropdown-list-using-javascript?rq=1 -->
+        <div class="infoBox">
+          Basic Binaries Sample Text: "Learn a bit about the gravitational-wave signal from two coalescing black holes, 
+          including the different phases of the signal. We also explore the role of the total mass of the binary and the effect of neglecting the final merger of the two black holes."
+        </div><br>
 
         <!-- Draw Plots -->
         <div id="strainVsTimePlot" class="plot"></div><br>
