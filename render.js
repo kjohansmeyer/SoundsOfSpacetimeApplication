@@ -24,21 +24,8 @@ function printVars() {
 }
 
 //=============================================================================//
-// ----------------------------- Defining Arrays ----------------------------- //
-//=============================================================================//
-let deltat = 0.0001,
-    tmax = 10,
-    N = tmax / deltat,
-    t = new Float32Array(N).fill(0), //probably can define with time steps instead of defining with zeros
-    f = new Float32Array(N).fill(0), //change this out for faster method? f = new Array(N); for (let i=0; i<n; ++i a[i]=0;
-    h = new Float32Array(N).fill(0),
-    v = new Float32Array(N).fill(0),
-    phi = new Float32Array(N).fill(0);
-
-//=============================================================================//
 // ----------------------------- Information Box ----------------------------- //
 //=============================================================================//
-
 
 // Citation: https://www.codeproject.com/Questions/699630/How-to-display-the-specific-Text-on-change-of-HTML
 var infoBoxArray = new Array();
@@ -56,6 +43,18 @@ function getInfoText(slction){
 //=============================================================================//
 // This entire function updates every time a slider is changed
 function updateFunction(alpha, m1sliderval, m2sliderval) {
+
+    //=============================================================================//
+    // ----------------------------- Defining Arrays ----------------------------- //
+    //=============================================================================//
+    let deltat = 0.0001,
+        tmax = 10,
+        N = tmax / deltat,
+        t = new Float32Array(N).fill(0), //probably can define with time steps instead of defining with zeros
+        f = new Float32Array(N).fill(0), //change this out for faster method? f = new Array(N); for (let i=0; i<n; ++i a[i]=0;
+        h = new Float32Array(N).fill(0),
+        v = new Float32Array(N).fill(0),
+        phi = new Float32Array(N).fill(0);
 
     const Msun = 0.00000492686088; //mass of the sun using geometric units to get f in Hz
 
@@ -89,6 +88,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         phic = 0,
         tc = t[0] + (5 / 256) * (M / (eta * Math.pow(v[0], 8)));
 
+    console.log({v});
     for (let n = 0; n < N; n++) {
         v[n] = Math.pow((256/5) * (eta/M) * (tc - t[n]), -1/8); //Solution to dv/dt = 32/5 (eta/M) v^9
         phi[n] = phic - (1/5) * Math.pow(5/eta, 3/8) * Math.pow((tc - t[n]) / M, 5/8); //Solution to dphi/dt = v^3/M
@@ -101,6 +101,9 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         fFiltered = f.filter(x => x);
     
     let A = 1/Math.pow(Math.max(...vFiltered),2); // A scales the strain function: A = 1/(vf)^2 which makes -1 < h(t) < 1 when alpha = 0
+
+    console.log({v});
+    console.log({vFiltered});
 
     // h(t) is calculated separate since it depends on A, which depends on the final frequency
     for (let n = 0; n < N; n++) {
@@ -148,7 +151,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         name: "Strain vs. Time",
         type: 'scatter',
         line: {
-            color: '#282828', //'white',
+            color: '#ff3d3d',//'#282828',
             width: 3
           }
     };
@@ -195,7 +198,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         y: fFiltered,
         type: 'scatter',
         line: {
-            color: '#282828', //'white',
+            color: '#ff3d3d',
             width: 3
           }
     };
@@ -221,13 +224,14 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     const sampleRate = 1/deltat;
 
     function startAudio({ array, sampleRate }) {
-        // We have to start with creating AudioContext
+        // Comments from link above:
+        // "We have to start with creating AudioContext"
         const audioContext = new AudioContext({sampleRate});
-        // create audio buffer of the same length as our array
+        // "create audio buffer of the same length as our array"
         const audioBuffer = audioContext.createBuffer(1, array.length, sampleRate);
-        // this copies our sine wave to the audio buffer
+        // "this copies our sine wave to the audio buffer"
         audioBuffer.copyToChannel(array, 0);
-        // some JavaScript magic to actually play the sound
+        // "some JavaScript magic to actually play the sound"
         const source = audioContext.createBufferSource();
         source.connect(audioContext.destination);
         source.buffer = audioBuffer;
