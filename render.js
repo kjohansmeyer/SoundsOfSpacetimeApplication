@@ -75,11 +75,11 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     console.log(strDeviceSelection);
 
     // Initial conditions:
-    if (strDeviceSelection == 'Laptop') {
+    if (strDeviceSelection == 'Laptop (120 Hz)') {
         f[0] = 120; //Hertz
-    } else if (strDeviceSelection == 'Headphones') {
-        f[0] = 40; //Hertz
-    } else if (strDeviceSelection == 'Subwoofer') {
+    } else if (strDeviceSelection == 'Headphones (50 Hz)') {
+        f[0] = 50; //Hertz
+    } else if (strDeviceSelection == 'Subwoofer (40 Hz)') {
         f[0] = 40; //Hertz
     }
     v[0] = Math.pow(Math.PI * M * f[0], 1/3);
@@ -118,30 +118,26 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         xaxis: {
             title: {
                 text: 'Time (sec)',
-                font: {
-                    family: 'Times New Roman',
-                    size: 26,
-                    color: 'white'
-                }
+                font: {family: 'Times New Roman', size: 26,color: 'white'}
             },
+            tickfont: {family: 'Times New Roman', size: 18, color: 'white'},
             color: 'white',
             rangemode: 'nonnegative',
-            showgrid: false
+            showgrid: false,
+            ticks: 'outside'
         },
         yaxis: {
             title: {
                 text: 'Normalized Strain',
-                font: {
-                    family: 'Times New Roman',
-                    size: 26,
-                    color: 'white'
-                }
+                font: {family: 'Times New Roman', size: 26,color: 'white'}
             },
+            tickfont: {family: 'Times New Roman', size: 18,color: 'white'},
             color: 'white',
             showgrid: false,
+            ticks: 'outside',
             range: [-Math.max(...hFiltered), Math.max(...hFiltered)] 
         },
-        margin: {l: 100, r: 50, b: 50, t: 75, pad: 4},
+        margin: {l: 100, r: 50, b: 60, t: 75, pad: 4},
         plot_bgcolor: 'white', //"#383838",
         paper_bgcolor: "#181818"
     }
@@ -178,14 +174,18 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         xaxis: {
             title: {text: 'Time (sec)', font: {family: 'Times New Roman', size: 26, color: 'white'}},
             color: 'white',
-            showgrid: false
+            showgrid: false,
+            ticks: 'outside',
+            tickfont: {family: 'Times New Roman', size: 18,color: 'white'},
         },
         yaxis: {
             title: {text: 'Frequency', font: {family: 'Times New Roman', size: 26, color: 'white'}},
             color: 'white',
-            showgrid: false
+            showgrid: false,
+            ticks: 'outside',
+            tickfont: {family: 'Times New Roman', size: 18,color: 'white'},
         },
-        margin: {l: 100, r: 50, b: 50, t: 75, pad: 4},
+        margin: {l: 100, r: 50, b: 60, t: 75, pad: 4},
         plot_bgcolor: 'white', //"#383838",
         paper_bgcolor: "#181818"
     }
