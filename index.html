@@ -71,22 +71,22 @@
         <!-- Select Device -->
         <!-- Citation: https://www.w3schools.com/tags/tag_select.asp -->
         <label for="selectDevice">Select your device:</label>
-        <select name="selectDevice" id="selectDevice">
+        <select name="selectDevice" id="selectDevice" onchange="getText(this)">
           <option value="laptop">Laptop</option>
           <option value="headphones">Headphones</option>
           <option value="subwoofer">Subwoofer</option>
         </select>
-        
-        <!-- Theme -->
-        <!-- Citation: https://www.w3schools.com/tags/tag_select.asp -->
+
+        <!-- Select Event -->
+        <!-- Citation: https://www.codeproject.com/Questions/699630/How-to-display-the-specific-Text-on-change-of-HTML -->
         <label for="selectEvent">Type of Event:</label>
-        <select name="selectEvent" id="selectEvent">
+        <select name="selectEvent" id="selectEvent" onchange="getInfoText(this)">
           <option value="basicBinaries">Basic Binaries</option>
           <option value="circularBinaries">Circular Binaries</option>
           <option value="spinningBinaries">Spinning Binaries</option>
-          <option value="ellipticalBinaries">Elliptical Binaries</option>
+          <option value="ellipticalBinaries">Elliptical Binaries</option>     
         </select>
-        
+    
         <!-- Buttons -->
         <button type="button" class="button" id="startAudioBtn">Play Waveform</button>
         <button type="button" class="button" id="stopAudioBtn">Stop Audio</button>
@@ -95,11 +95,10 @@
         <button type="button" class="button" onclick="toggleStrainVsTimePlot()">Toggle Strain Plot</button>
         <button type="button" class="button" onclick="toggleFrequencyVsTimePlot()">Toggle Frequency Plot</button><br><br>
 
-        <!-- Explanation Box -->
-        <!-- Citation: https://www.thesitewizard.com/css/rectangular-box-border.shtml -->
-        <!-- Might Need: https://stackoverflow.com/questions/1085801/get-selected-value-in-dropdown-list-using-javascript?rq=1 -->
-        <div class="infoBox">
-          Basic Binaries Sample Text: "Learn a bit about the gravitational-wave signal from two coalescing black holes, 
+
+        <!-- Information Box -->
+        <div id="textDiv">
+          Basic Binaries Sample Text: "Learn a bit about the gravitational-wave signal from two coalescing black holes,
           including the different phases of the signal. We also explore the role of the total mass of the binary and the effect of neglecting the final merger of the two black holes."
         </div><br>
 
