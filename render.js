@@ -49,7 +49,7 @@ infoBoxArray[3] = 'Elliptical Binaries Sample Text: When we allow the binary orb
 
 function getInfoText(slction){
     var txtSelected = slction.selectedIndex;
-    document.getElementById('textDiv').innerHTML = infoBoxArray[txtSelected];
+    document.getElementById('infoBox').innerHTML = infoBoxArray[txtSelected];
 }
 //=============================================================================//
 // ----------------------------- Update function ----------------------------- //
