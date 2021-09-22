@@ -36,6 +36,22 @@ let deltat = 0.0001,
     phi = new Float32Array(N).fill(0);
 
 //=============================================================================//
+// ----------------------------- Information Box ----------------------------- //
+//=============================================================================//
+
+
+// Citation: https://www.codeproject.com/Questions/699630/How-to-display-the-specific-Text-on-change-of-HTML
+var infoBoxArray = new Array();
+infoBoxArray[0] = "Basic Binaries Sample Text: Learn a bit about the gravitational-wave signal from two coalescing black holes, including the different phases of the signal. We also explore the role of the total mass of the binary and the effect of neglecting the final merger of the two black holes.";
+infoBoxArray[1] = "Circular Binaries Sample Text: Here we focus on two compact objects (neutron stars or black holes) in a circular orbit that is shrinking due to the gravitational waves that are emitted. We expect this to be the most common LIGO source.";
+infoBoxArray[2] = "Spinning Binaries Sample Text: Now we allow our individual stars to spin about each of their axes. Because the spin of a body affects its gravity in Einstein's theory, we will see that the gravitational-wave signal (and the corresponding sound) is likewise affected.";
+infoBoxArray[3] = 'Elliptical Binaries Sample Text: When we allow the binary orbit to be elliptical the "sound" of the signal become even more interesting.';
+
+function getInfoText(slction){
+    var txtSelected = slction.selectedIndex;
+    document.getElementById('textDiv').innerHTML = infoBoxArray[txtSelected];
+}
+//=============================================================================//
 // ----------------------------- Update function ----------------------------- //
 //=============================================================================//
 // This entire function updates every time a slider is changed
@@ -52,20 +68,6 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         m2 = m2sliderval * Msun,
         M = (m1 + m2);
     
-    // This doesn't work yet
-    // var eventSelection = document.getElementById("selectEvent");
-    // var strEventSelection = eventSelection.options[eventSelection.selectedIndex].text;
-    // var infoBox = document.getElementById("selectEvent");
-    // if (strEventSelection == 'Basic Binaries') {
-    //     infoBox.innerHTML = "Basic Binaries";
-    // } else if (strEventSelection == 'Circular Binaries') {
-    //     infoBox.innerHTML = "Circular Binaries";
-    // } else if (strEventSelection == 'Spinning Binaries') {
-    //     infoBox.innerHTML = "Spinning Binaries";
-    // } else if (strEventSelection == 'Elliptical Binaries') {
-    //     infoBox.innerHTML = "Elliptical Binaries";
-    // }
-
     // Selected device determines the starting frequency
     // Citation: https://stackoverflow.com/questions/1085801/get-selected-value-in-dropdown-list-using-javascript
     var deviceSelection = document.getElementById("selectDevice");
