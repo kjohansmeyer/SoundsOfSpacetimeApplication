@@ -38,36 +38,21 @@ function getInfoText(slction){
     var txtSelected = slction.selectedIndex;
     document.getElementById('infoBox').innerHTML = infoBoxArray[txtSelected];
 }
+
 //=============================================================================//
 // ----------------------------- Update function ----------------------------- //
 //=============================================================================//
 // This entire function updates every time a slider is changed
 function updateFunction(alpha, m1sliderval, m2sliderval) {
 
-    //=============================================================================//
-    // ----------------------------- Defining Arrays ----------------------------- //
-    //=============================================================================//
-    let deltat = 0.0001,
-        tmax = 10,
-        N = tmax / deltat,
-        t = new Float32Array(N).fill(0), //probably can define with time steps instead of defining with zeros
-        f = new Float32Array(N).fill(0), //change this out for faster method? f = new Array(N); for (let i=0; i<n; ++i a[i]=0;
-        h = new Float32Array(N).fill(0),
-        v = new Float32Array(N).fill(0),
-        phi = new Float32Array(N).fill(0);
-
+    //-------------------------------- Constants ------------------------------- //
     const Msun = 0.00000492686088; //mass of the sun using geometric units to get f in Hz
-
-    t[0] = 0;
-    for (let i = 1; i < N; i++) {
-        t[i] = t[i - 1] + deltat;
-    }
 
     let m1 = m1sliderval * Msun,
         m2 = m2sliderval * Msun,
         M = (m1 + m2);
     
-    // Selected device determines the starting frequency
+    //-------------------------- Starting Frequency Selection ------------------------- //
     // Citation: https://stackoverflow.com/questions/1085801/get-selected-value-in-dropdown-list-using-javascript
     var deviceSelection = document.getElementById("selectDevice");
     var strDeviceSelection = deviceSelection.options[deviceSelection.selectedIndex].text;
@@ -75,44 +60,55 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
 
     // Initial conditions:
     if (strDeviceSelection == 'Laptop (120 Hz)') {
-        f[0] = 120; //Hertz
+        var f0 = 120; //Hertz
     } else if (strDeviceSelection == 'Headphones (50 Hz)') {
-        f[0] = 50; //Hertz
+        var f0 = 50; //Hertz
     } else if (strDeviceSelection == 'Subwoofer (40 Hz)') {
-        f[0] = 40; //Hertz
+        var f0 = 40; //Hertz
     }
-    v[0] = Math.pow(Math.PI * M * f[0], 1/3);
 
-    // ----------------------------- Calculations ----------------------------- //
+    //----------------------------- Calculations ------------------------------//
     let eta = (m1 * m2) / (M * M), //reduced mass ratio, varies from 0 to 0.25
-        phic = 0,
-        tc = t[0] + (5 / 256) * (M / (eta * Math.pow(v[0], 8)));
+        fISCO = (1/36) * Math.sqrt(6) / (Math.PI * M), //ISCO = Innermost-Stable-Circular-Orbit
+        phic = 0;
+    
+    let v0 = Math.pow(Math.PI * M * f0, 1/3),
+        vf = Math.pow(Math.PI * M * fISCO, 1/3); // fISCO ≈ fend
+    
+    let tc = 0 + (5 / 256) * (M / (eta * Math.pow(v0, 8))),
+        tf = 0 + (5 / 256) * (M / eta) * ((1 / Math.pow(v0, 8) - 1 / Math.pow(vf, 8)));
 
-    console.log({v});
+    let deltat = 0.0001,
+        N = tf / deltat;
+    //-------------------------------- Time Array ---------------------------------//
+    let t = new Float32Array(N).fill(0); //probably can define with time steps instead of defining with zeros
+    
+    t[0] = 0; //fills t array with [0, deltat, 2*deltat, 3*deltat...]
+    for (let i = 1; i < N; i++) {
+        t[i] = t[i - 1] + deltat;
+    }
+
+    //----------------------------- Defining Arrays -----------------------------//
+    let f = new Float32Array(N).fill(0), //change this out for faster method? f = new Array(N); for (let i=0; i<n; ++i a[i]=0;
+        h = new Float32Array(N).fill(0),
+        phi = new Float32Array(N).fill(0),
+        v = new Float32Array(N).fill(0);
+    
+    f[0] = f0;
+    v[0] = v0;
+
     for (let n = 0; n < N; n++) {
         v[n] = Math.pow((256/5) * (eta/M) * (tc - t[n]), -1/8); //Solution to dv/dt = 32/5 (eta/M) v^9
         phi[n] = phic - (1/5) * Math.pow(5/eta, 3/8) * Math.pow((tc - t[n]) / M, 5/8); //Solution to dphi/dt = v^3/M
         f[n] = Math.pow(v[n], 3) / (Math.PI * M);
     }
-    // filters Not-a-Numbers (NaN's) from v, phi, and f
-    // Citation: https://www.codegrepper.com/code-examples/javascript/js+remove+all+NaN+string+from+array
-    let vFiltered = v.filter(x => x),
-        phiFiltered = phi.filter(x => x),
-        fFiltered = f.filter(x => x);
-    
-    let A = 1/Math.pow(Math.max(...vFiltered),2); // A scales the strain function: A = 1/(vf)^2 which makes -1 < h(t) < 1 when alpha = 0
 
-    console.log({v});
-    console.log({vFiltered});
+    let A = 1/Math.pow(Math.max(...v),2); // A scales the strain function: A = 1/(vf)^2 which makes -1 < h(t) < 1 when alpha = 0
 
     // h(t) is calculated separate since it depends on A, which depends on the final frequency
     for (let n = 0; n < N; n++) {
         h[n] = A * ((Math.pow(v[n], 2)) * Math.sin(2 * phi[n]) + alpha * (Math.pow(v[n], 3) * Math.sin(3 * phi[n])));
     }
-    let hFiltered = h.filter(x => x);
-
-    let tstop = hFiltered.length*deltat //can be calculated analytically using t_f = t[0] + (5/256)*(M/eta)*(1/(v[0])^8 + 1/(vf)^8))
-    //console.log({vFiltered}, {phiFiltered}, {hFiltered}, {fFiltered});
 
     // ----------------------------- Plotting ----------------------------- //
     // ----------------------- Strain vs. Time Plot ---------------------- //
@@ -138,8 +134,23 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
             color: 'white',
             showgrid: false,
             ticks: 'outside',
-            range: [-Math.max(...hFiltered), Math.max(...hFiltered)] 
+            range: [-Math.max(...h), Math.max(...h)] 
         },
+        shapes: [ //Horizontal line for h vs. t plot
+            {
+                type: 'line',
+                xref: 'x',
+                x0: 0,
+                y0: -10,
+                x1: 0,
+                y1: 10,
+                line:{
+                    color: 'black',
+                    width: 1,
+                    dash:'solid'
+                }
+            }
+        ],
         margin: {l: 100, r: 50, b: 60, t: 75, pad: 4},
         plot_bgcolor: 'white', //"#383838",
         paper_bgcolor: "#181818"
@@ -147,7 +158,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
 
     let trace0 = {
         x: t,
-        y: hFiltered,
+        y: h,
         name: "Strain vs. Time",
         type: 'scatter',
         line: {
@@ -195,7 +206,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
 
     let trace1 = {
         x: t,
-        y: fFiltered,
+        y: f,
         type: 'scatter',
         line: {
             color: '#ff3d3d',
@@ -239,7 +250,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         }
 
     function playAudio() {
-        startAudio({ array: hFiltered, sampleRate });
+        startAudio({ array: h, sampleRate });
     }
 
 } // ----------------------- End of Update Function ---------------------- //
