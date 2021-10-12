@@ -55,18 +55,11 @@
           <a href="https://www.soundsofspacetime.org/contributors.html" target="_blank">About</a>
         </div>
 
-        <!-- Adjustable Sliders -->
-        <label for="alphaSlider"><b>Alpha (spin precession variable) </b></label>
-        <input type="range" min="0" max="1" value="0" class="slider" step="0.01" id="alphaSlider" oninput="this.nextElementSibling.value = this.value"> 
-        <output>0</output><br>
-
-        <label for="m1slider"><b>Mass #1 (in terms of solar masses)</b></label>
-        <input type="range" min="1" max="100" value="1.4" class="slider" step="0.1" id="m1slider" oninput="this.nextElementSibling.value = this.value"> 
-        <output>1.4</output><br>
-        
-        <label for="m2slider"><b>Mass #2 (in terms of solar masses)</b></label>
-        <input type="range" min="1" max="100" value="1.4" step="0.1" class="slider" id="m2slider" oninput="this.nextElementSibling.value = this.value"> 
-        <output>1.4</output><br><br>
+        <!-- Information Box -->
+        <div id="infoBox">
+          Basic Binaries Sample Text: "Learn a bit about the gravitational-wave signal from two coalescing black holes,
+          including the different phases of the signal. We also explore the role of the total mass of the binary and the effect of neglecting the final merger of the two black holes."
+        </div><br>
 
         <!-- Select Device -->
         <!-- Citation: https://www.w3schools.com/tags/tag_select.asp -->
@@ -76,7 +69,7 @@
           <option value="headphones">Headphones (50 Hz)</option>
           <option value="subwoofer">Subwoofer (40 Hz)</option>
         </select>
-
+        
         <!-- Select Event -->
         <!-- Citation: https://www.codeproject.com/Questions/699630/How-to-display-the-specific-Text-on-change-of-HTML -->
         <label for="selectEvent">Type of Event:</label>
@@ -95,12 +88,18 @@
         <button type="button" class="button" onclick="toggleStrainVsTimePlot()">Toggle Strain Plot</button>
         <button type="button" class="button" onclick="toggleFrequencyVsTimePlot()">Toggle Frequency Plot</button><br><br>
 
+        <!-- Adjustable Sliders -->
+        <label for="alphaSlider"><b>Alpha (spin precession variable) </b></label>
+        <input type="range" min="0" max="1" value="0" class="slider" step="0.01" id="alphaSlider" oninput="this.nextElementSibling.value = this.value"> 
+        <output>0</output><br>
 
-        <!-- Information Box -->
-        <div id="infoBox">
-          Basic Binaries Sample Text: "Learn a bit about the gravitational-wave signal from two coalescing black holes,
-          including the different phases of the signal. We also explore the role of the total mass of the binary and the effect of neglecting the final merger of the two black holes."
-        </div><br>
+        <label for="m1slider"><b>Mass #1 (in terms of solar masses)</b></label>
+        <input type="range" min="1" max="50" value="1.4" class="slider" step="0.1" id="m1slider" oninput="this.nextElementSibling.value = this.value"> 
+        <output>1.4</output><br>
+        
+        <label for="m2slider"><b>Mass #2 (in terms of solar masses)</b></label>
+        <input type="range" min="1" max="50" value="1.4" step="0.1" class="slider" id="m2slider" oninput="this.nextElementSibling.value = this.value"> 
+        <output>1.4</output><br><br>
 
         <!-- Draw Plots -->
         <div id="strainVsTimePlot" class="plot"></div><br>
@@ -109,7 +108,7 @@
         <!-- Bottom Images -->
         <img src="logo.PNG" class="image" alt="MSU NSF & LSC Logos">
 
-        <div id="credits">Created by <a href="https://www.linkedin.com/in/kevin-johansmeyer/" target="_blank">Kevin Johansmeyer</a> as part of Montclair State University and the LIGO Scientific Collaboration</div>
+        <div id="credits">Created by <a href="https://www.linkedin.com/in/kevin-johansmeyer/" target="_blank">Kevin Johansmeyer</a> as part of <a href="https://www.montclair.edu/physics-astronomy/" target="_blank">Montclair State University</a> and the <a href="https://www.ligo.org/" target="_blank">LIGO Scientific Collaboration</a></div>
       </div>
     <script src="render.js"></script>
     

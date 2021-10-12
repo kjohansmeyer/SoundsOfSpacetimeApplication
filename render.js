@@ -328,21 +328,9 @@ updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection);
 
 /* 
 Things that need to be added or updated:
-- Fix NaN problem
 - Stop sound when sliders are changed
 - Stop sound when button is pressed again
-- Put box around plots with tick marks?
 - Pick deltat more carefully (based on sliders)
-- Change masses 1-100 solar masses
 - Separate images?
 - Check mobile view
-
-Other: 
-- Look at Ghosh Python code
-- GW assignments and readings
-
-Things that have been fixed:
-- Plot download size, resolution, and file name
-- Completely new sound programming
-- Changed plot colors (may need tweaking) [maybe add drop down menu for dark/light mode?]
 */
