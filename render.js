@@ -247,6 +247,11 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         source.connect(audioContext.destination);
         source.buffer = audioBuffer;
         source.start();
+
+        // Disables startAudioBtn for duration of sound
+        // Citation: https://stackoverflow.com/questions/30558587/javascript-disable-button-and-reenable-it-after-5-seconds
+        document.getElementById("startAudioBtn").disabled = true;
+            setTimeout(function(){document.getElementById("startAudioBtn").disabled = false;},1000*tf);
         }
 
     function playAudio() {
