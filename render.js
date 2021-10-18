@@ -110,6 +110,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         h[n] = A * ((Math.pow(v[n], 2)) * Math.sin(2 * phi[n]) + alpha * (Math.pow(v[n], 3) * Math.sin(3 * phi[n])));
     }
 
+    console.log({t});
     // ----------------------------- Plotting ----------------------------- //
     // ----------------------- Strain vs. Time Plot ---------------------- //
     let layout0 = {
@@ -277,7 +278,6 @@ console.log({ alpha }, { m1sliderval }, { m2sliderval });
 alphaSlider.addEventListener('change', function (event) {
     alpha = Number(alphaSlider.value);
     printVars();
-    //waveSound.stop(); //does not work because waveSound is in function
     updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection);
 })
 
@@ -294,8 +294,7 @@ m2slider.addEventListener('change', function (event) {
 })
 
 selectDevice.addEventListener('change', function (event) {
-    deviceSelection = Number(m2slider.value);
-    printVars();
+    // printVars();
     updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection);
 })
 
