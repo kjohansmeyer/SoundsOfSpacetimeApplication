@@ -97,16 +97,25 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     f[0] = f0;
     v[0] = v0;
 
+    // for (let n = 0; n < N; n++) {
+    //     v[n] = Math.pow((256/5) * (eta/M) * (tc - t[n]), -1/8); //Solution to dv/dt = 32/5 (eta/M) v^9
+    //     phi[n] = phic - (1/5) * Math.pow(5/eta, 3/8) * Math.pow((tc - t[n]) / M, 5/8); //Solution to dphi/dt = v^3/M
+    //     f[n] = Math.pow(v[n], 3) / (Math.PI * M);
+    // }
+
+    // let A = 1/Math.pow(Math.max(...v),2); // A scales the strain function: A = 1/(vf)^2 which makes -1 < h(t) < 1 when alpha = 0
+
+    // // h(t) is calculated separate since it depends on A, which depends on the final frequency
+    // for (let n = 0; n < N; n++) {
+    //     h[n] = A * ((Math.pow(v[n], 2)) * Math.sin(2 * phi[n]) + alpha * (Math.pow(v[n], 3) * Math.sin(3 * phi[n])));
+    // }
+
+    let A = 1/Math.pow(vf,2); // A scales the strain function: A = 1/(vf)^2 which makes -1 < h(t) < 1 when alpha = 0
+
     for (let n = 0; n < N; n++) {
         v[n] = Math.pow((256/5) * (eta/M) * (tc - t[n]), -1/8); //Solution to dv/dt = 32/5 (eta/M) v^9
         phi[n] = phic - (1/5) * Math.pow(5/eta, 3/8) * Math.pow((tc - t[n]) / M, 5/8); //Solution to dphi/dt = v^3/M
         f[n] = Math.pow(v[n], 3) / (Math.PI * M);
-    }
-
-    let A = 1/Math.pow(Math.max(...v),2); // A scales the strain function: A = 1/(vf)^2 which makes -1 < h(t) < 1 when alpha = 0
-
-    // h(t) is calculated separate since it depends on A, which depends on the final frequency
-    for (let n = 0; n < N; n++) {
         h[n] = A * ((Math.pow(v[n], 2)) * Math.sin(2 * phi[n]) + alpha * (Math.pow(v[n], 3) * Math.sin(3 * phi[n])));
     }
 
@@ -294,7 +303,7 @@ m2slider.addEventListener('change', function (event) {
 })
 
 selectDevice.addEventListener('change', function (event) {
-    // printVars();
+    printVars();
     updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection);
 })
 
