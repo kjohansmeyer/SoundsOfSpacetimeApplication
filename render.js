@@ -20,7 +20,7 @@ function headphoneAlert() {
 // ------------------------------ Slider Debug ------------------------------- //
 //=============================================================================//
 function printVars() {
-    console.log({ alpha }, { m1sliderval }, { m2sliderval });
+    console.log({alpha}, {m1sliderval}, {m2sliderval});
 }
 
 //=============================================================================//
@@ -78,7 +78,11 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     let tc = 0 + (5 / 256) * (M / (eta * Math.pow(v0, 8))),
         tf = 0 + (5 / 256) * (M / eta) * ((1 / Math.pow(v0, 8) - 1 / Math.pow(vf, 8)));
 
-    let deltat = 0.0001,
+    // From previous, constant time step:
+    // let deltat = 0.0001,
+    //     N = tf / deltat;
+    let nStep = 16,
+        deltat = 1/(nStep*fISCO),
         N = tf / deltat;
     //-------------------------------- Time Array ---------------------------------//
     let t = new Float32Array(N).fill(0); //probably can define with time steps instead of defining with zeros
@@ -97,19 +101,6 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     f[0] = f0;
     v[0] = v0;
 
-    // for (let n = 0; n < N; n++) {
-    //     v[n] = Math.pow((256/5) * (eta/M) * (tc - t[n]), -1/8); //Solution to dv/dt = 32/5 (eta/M) v^9
-    //     phi[n] = phic - (1/5) * Math.pow(5/eta, 3/8) * Math.pow((tc - t[n]) / M, 5/8); //Solution to dphi/dt = v^3/M
-    //     f[n] = Math.pow(v[n], 3) / (Math.PI * M);
-    // }
-
-    // let A = 1/Math.pow(Math.max(...v),2); // A scales the strain function: A = 1/(vf)^2 which makes -1 < h(t) < 1 when alpha = 0
-
-    // // h(t) is calculated separate since it depends on A, which depends on the final frequency
-    // for (let n = 0; n < N; n++) {
-    //     h[n] = A * ((Math.pow(v[n], 2)) * Math.sin(2 * phi[n]) + alpha * (Math.pow(v[n], 3) * Math.sin(3 * phi[n])));
-    // }
-
     let A = 1/Math.pow(vf,2); // A scales the strain function: A = 1/(vf)^2 which makes -1 < h(t) < 1 when alpha = 0
 
     for (let n = 0; n < N; n++) {
@@ -117,9 +108,19 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         phi[n] = phic - (1/5) * Math.pow(5/eta, 3/8) * Math.pow((tc - t[n]) / M, 5/8); //Solution to dphi/dt = v^3/M
         f[n] = Math.pow(v[n], 3) / (Math.PI * M);
         h[n] = A * ((Math.pow(v[n], 2)) * Math.sin(2 * phi[n]) + alpha * (Math.pow(v[n], 3) * Math.sin(3 * phi[n])));
+        // if (isNaN(h[n])) { // this needs to be fixed, stop loop if h[n] is NaN
+        //     return h;
+        // } 
     }
+    //h = h.filter(x => x); //makes page crash, do different way
 
-    console.log({t});
+    // Maximum of the 100 values of h(t) [near the end] to determine how to draw y-axis limits
+    // Consider absolute value?
+    let hSlice = h.slice(N-120,N-20);
+    let hMax = Math.max(...hSlice);
+
+    console.log({hMax},{h},{v},{phi});
+    console.log({deltat});
     // ----------------------------- Plotting ----------------------------- //
     // ----------------------- Strain vs. Time Plot ---------------------- //
     let layout0 = {
@@ -144,7 +145,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
             color: 'white',
             showgrid: false,
             ticks: 'outside',
-            range: [-Math.max(...h), Math.max(...h)] 
+            range: [-hMax, hMax] //h.length - 1 is the last element in the array
         },
         shapes: [ //Horizontal line for h vs. t plot
             {
@@ -163,17 +164,19 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         ],
         margin: {l: 100, r: 50, b: 60, t: 75, pad: 4},
         plot_bgcolor: 'white', //"#383838",
-        paper_bgcolor: "#181818"
+        paper_bgcolor: '#181818'
     }
 
     let trace0 = {
         x: t,
         y: h,
-        name: "Strain vs. Time",
+        name: 'Strain vs. Time',
         type: 'scatter',
         line: {
             color: '#ff3d3d',//'#282828',
-            width: 3
+            width: 3,
+            shape: 'spline', // Spline used to smooth curve between points
+            smoothing: 1.3 // Smoothing value between 0 and 1
           }
     };
 
