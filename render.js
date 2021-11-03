@@ -70,13 +70,14 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     //----------------------------- Calculations ------------------------------//
     let eta = (m1 * m2) / (M * M), //reduced mass ratio, varies from 0 to 0.25
         fISCO = (1/36) * Math.sqrt(6) / (Math.PI * M), //ISCO = Innermost-Stable-Circular-Orbit
-        phic = 0;
+        phic = 0,
+        phip = 0;
     
     let v0 = Math.pow(Math.PI * M * f0, 1/3),
         vf = Math.pow(Math.PI * M * fISCO, 1/3); // fISCO ≈ fend
     
     let tc = 0 + (5 / 256) * (M / (eta * Math.pow(v0, 8))),
-        tf = 0 + (5 / 256) * (M / eta) * ((1 / Math.pow(v0, 8) - 1 / Math.pow(vf, 8)));
+        tf = 0 + (5 / 256) * (M / eta) * ((1 / Math.pow(v0, 8)) - (1 / Math.pow(vf, 8)));
 
     // From previous, constant time step:
     // let deltat = 0.0001,
@@ -132,7 +133,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
             },
             tickfont: {family: 'Times New Roman', size: 18, color: 'white'},
             color: 'white',
-            rangemode: 'nonnegative',
+            rangemode: 'nonnegative', // does this work?
             showgrid: false,
             ticks: 'outside'
         },
@@ -146,6 +147,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
             showgrid: false,
             ticks: 'outside',
             range: [-hMax, hMax] //h.length - 1 is the last element in the array
+
         },
         shapes: [ //Horizontal line for h vs. t plot
             {
