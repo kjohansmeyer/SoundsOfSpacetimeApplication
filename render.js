@@ -109,15 +109,13 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         phi[n] = phic - (1/5) * Math.pow(5/eta, 3/8) * Math.pow((tc - t[n]) / M, 5/8); //Solution to dphi/dt = v^3/M
         f[n] = Math.pow(v[n], 3) / (Math.PI * M);
         h[n] = A * ((Math.pow(v[n], 2)) * Math.sin(2 * phi[n]) + alpha * (Math.pow(v[n], 3) * Math.sin(3 * phi[n])));
-        // if (isNaN(h[n])) { // this needs to be fixed, stop loop if h[n] is NaN
-        //     return h;
-        // } 
+        if (isNaN(h[n])) { break; } // breaks loop if any current h(t) value is NaN
     }
-    //h = h.filter(x => x); //makes page crash, do different way
 
     // Maximum of the 100 values of h(t) [near the end] to determine how to draw y-axis limits
     // Consider absolute value?
-    let hSlice = h.slice(N-120,N-20);
+    let periodFinal = 1 / fISCO;
+    let hSlice = h.slice(h.length-300,h.length);
     let hMax = Math.max(...hSlice);
 
     console.log({hMax},{h},{v},{phi});
