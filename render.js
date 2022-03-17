@@ -82,9 +82,11 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     // From previous, constant time step:
     // let deltat = 0.0001,
     //     N = tf / deltat;
-    let nStep = 16,
+    let nStep = 4,
         deltat = 1/(nStep*fISCO),
+        // N = Math.floor(tf / deltat);
         N = tf / deltat;
+        console.log(N);
     //-------------------------------- Time Array ---------------------------------//
     let t = new Float32Array(N).fill(0); //probably can define with time steps instead of defining with zeros
     
@@ -118,7 +120,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     let hSlice = h.slice(h.length-300,h.length);
     let hMax = Math.max(...hSlice);
 
-    console.log({hMax},{h},{v},{phi});
+    console.log({hMax},{h},{v},{phi},{f});
     console.log({deltat});
     // ----------------------------- Plotting ----------------------------- //
     // ----------------------- Strain vs. Time Plot ---------------------- //
