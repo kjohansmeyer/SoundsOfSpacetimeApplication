@@ -20,7 +20,7 @@ function headphoneAlert() {
 // ------------------------------ Slider Debug ------------------------------- //
 //=============================================================================//
 function printVars() {
-    console.log({ alpha }, { m1sliderval }, { m2sliderval });
+    console.log({alpha}, {m1sliderval}, {m2sliderval});
 }
 
 //=============================================================================//
@@ -70,16 +70,23 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     //----------------------------- Calculations ------------------------------//
     let eta = (m1 * m2) / (M * M), //reduced mass ratio, varies from 0 to 0.25
         fISCO = (1/36) * Math.sqrt(6) / (Math.PI * M), //ISCO = Innermost-Stable-Circular-Orbit
-        phic = 0;
+        phic = 0,
+        phip = 0;
     
     let v0 = Math.pow(Math.PI * M * f0, 1/3),
         vf = Math.pow(Math.PI * M * fISCO, 1/3); // fISCO ≈ fend
     
     let tc = 0 + (5 / 256) * (M / (eta * Math.pow(v0, 8))),
-        tf = 0 + (5 / 256) * (M / eta) * ((1 / Math.pow(v0, 8) - 1 / Math.pow(vf, 8)));
+        tf = 0 + (5 / 256) * (M / eta) * ((1 / Math.pow(v0, 8)) - (1 / Math.pow(vf, 8)));
 
-    let deltat = 0.0001,
+    // From previous, constant time step:
+    // let deltat = 0.0001,
+    //     N = tf / deltat;
+    let nStep = 4,
+        deltat = 1/(nStep*fISCO),
+        // N = Math.floor(tf / deltat);
         N = tf / deltat;
+        console.log(N);
     //-------------------------------- Time Array ---------------------------------//
     let t = new Float32Array(N).fill(0); //probably can define with time steps instead of defining with zeros
     
@@ -97,19 +104,24 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     f[0] = f0;
     v[0] = v0;
 
+    let A = 1/Math.pow(vf,2); // A scales the strain function: A = 1/(vf)^2 which makes -1 < h(t) < 1 when alpha = 0
+
     for (let n = 0; n < N; n++) {
         v[n] = Math.pow((256/5) * (eta/M) * (tc - t[n]), -1/8); //Solution to dv/dt = 32/5 (eta/M) v^9
         phi[n] = phic - (1/5) * Math.pow(5/eta, 3/8) * Math.pow((tc - t[n]) / M, 5/8); //Solution to dphi/dt = v^3/M
         f[n] = Math.pow(v[n], 3) / (Math.PI * M);
-    }
-
-    let A = 1/Math.pow(Math.max(...v),2); // A scales the strain function: A = 1/(vf)^2 which makes -1 < h(t) < 1 when alpha = 0
-
-    // h(t) is calculated separate since it depends on A, which depends on the final frequency
-    for (let n = 0; n < N; n++) {
         h[n] = A * ((Math.pow(v[n], 2)) * Math.sin(2 * phi[n]) + alpha * (Math.pow(v[n], 3) * Math.sin(3 * phi[n])));
+        if (isNaN(h[n])) { break; } // breaks loop if any current h(t) value is NaN
     }
 
+    // Maximum of the 100 values of h(t) [near the end] to determine how to draw y-axis limits
+    // Consider absolute value?
+    let periodFinal = 1 / fISCO;
+    let hSlice = h.slice(h.length-300,h.length);
+    let hMax = Math.max(...hSlice);
+
+    console.log({hMax},{h},{v},{phi},{f});
+    console.log({deltat});
     // ----------------------------- Plotting ----------------------------- //
     // ----------------------- Strain vs. Time Plot ---------------------- //
     let layout0 = {
@@ -121,7 +133,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
             },
             tickfont: {family: 'Times New Roman', size: 18, color: 'white'},
             color: 'white',
-            rangemode: 'nonnegative',
+            rangemode: 'nonnegative', // does this work?
             showgrid: false,
             ticks: 'outside'
         },
@@ -134,7 +146,8 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
             color: 'white',
             showgrid: false,
             ticks: 'outside',
-            range: [-Math.max(...h), Math.max(...h)] 
+            range: [-hMax, hMax] //h.length - 1 is the last element in the array
+
         },
         shapes: [ //Horizontal line for h vs. t plot
             {
@@ -153,17 +166,19 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         ],
         margin: {l: 100, r: 50, b: 60, t: 75, pad: 4},
         plot_bgcolor: 'white', //"#383838",
-        paper_bgcolor: "#181818"
+        paper_bgcolor: '#181818'
     }
 
     let trace0 = {
         x: t,
         y: h,
-        name: "Strain vs. Time",
+        name: 'Strain vs. Time',
         type: 'scatter',
         line: {
             color: '#ff3d3d',//'#282828',
-            width: 3
+            width: 3,
+            shape: 'spline', // Spline used to smooth curve between points
+            smoothing: 1.3 // Smoothing value between 0 and 1
           }
     };
 
@@ -247,6 +262,11 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         source.connect(audioContext.destination);
         source.buffer = audioBuffer;
         source.start();
+
+        // Disables startAudioBtn for duration of sound
+        // Citation: https://stackoverflow.com/questions/30558587/javascript-disable-button-and-reenable-it-after-5-seconds
+        document.getElementById("startAudioBtn").disabled = true;
+            setTimeout(function(){document.getElementById("startAudioBtn").disabled = false;},1000*tf);
         }
 
     function playAudio() {
@@ -272,7 +292,6 @@ console.log({ alpha }, { m1sliderval }, { m2sliderval });
 alphaSlider.addEventListener('change', function (event) {
     alpha = Number(alphaSlider.value);
     printVars();
-    //waveSound.stop(); //does not work because waveSound is in function
     updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection);
 })
 
@@ -289,7 +308,6 @@ m2slider.addEventListener('change', function (event) {
 })
 
 selectDevice.addEventListener('change', function (event) {
-    deviceSelection = Number(m2slider.value);
     printVars();
     updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection);
 })
@@ -328,21 +346,9 @@ updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection);
 
 /* 
 Things that need to be added or updated:
-- Fix NaN problem
 - Stop sound when sliders are changed
 - Stop sound when button is pressed again
-- Put box around plots with tick marks?
 - Pick deltat more carefully (based on sliders)
-- Change masses 1-100 solar masses
 - Separate images?
 - Check mobile view
-
-Other: 
-- Look at Ghosh Python code
-- GW assignments and readings
-
-Things that have been fixed:
-- Plot download size, resolution, and file name
-- Completely new sound programming
-- Changed plot colors (may need tweaking) [maybe add drop down menu for dark/light mode?]
 */
