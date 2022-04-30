@@ -33,7 +33,10 @@
          <link rel="apple-touch-icon" href="apple-touch-icon.png">
      
          <link rel="stylesheet" href="mystyle.css">
-     
+        
+         <!-- Citation: https://github.com/taweisse/wavJS -->
+         <script src = "wav.js"></script>
+
          <!-- Plotly.js (Plotting Library) [Keep in <head>] -->
          <script src ="plotly-latest.min.js"></script> <!-- Refers to local file-->
          <!-- <script src ="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
@@ -82,6 +85,7 @@
          
              <!-- Buttons -->
              <button type="button" class="button" id="startAudioBtn">Play Waveform</button>
+             <button type="button" class="button" id="downloadAudio">Download Audio</button>
              <button type="button" class="button" onclick="toggleStrainVsTimePlot()">Toggle Strain Plot</button>
              <button type="button" class="button" onclick="toggleFrequencyVsTimePlot()">Toggle Frequency Plot</button><br><br>
      

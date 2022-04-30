@@ -246,22 +246,28 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     // ----------------------------- Audio ----------------------------- //
     document.getElementById("startAudioBtn").onclick = function() {playAudio()};
 
-    // Citation: https://darthvanger.medium.com/synthesize-sound-with-javascript-sine-wave-940f9cd7dae2
     const sampleRate = 1/deltat;
+    console.log({sampleRate});
+    let wav = new WAV(Math.floor(sampleRate),1); //1 = mono, 2 = stereo
 
     function startAudio({ array, sampleRate }) {
-        // Comments from link above:
-        // "We have to start with creating AudioContext"
-        const audioContext = new AudioContext({sampleRate});
-        // "create audio buffer of the same length as our array"
-        const audioBuffer = audioContext.createBuffer(1, array.length, sampleRate);
-        // "this copies our sine wave to the audio buffer"
-        audioBuffer.copyToChannel(array, 0);
-        // "some JavaScript magic to actually play the sound"
-        const source = audioContext.createBufferSource();
-        source.connect(audioContext.destination);
-        source.buffer = audioBuffer;
-        source.start();
+        // // Old AudioContext to generate sounds - replaced with wav.js
+        // // Citation: https://darthvanger.medium.com/synthesize-sound-with-javascript-sine-wave-940f9cd7dae2
+        // // Comments from link above:
+        // // "We have to start with creating AudioContext"
+        // const audioContext = new AudioContext({sampleRate});
+        // // "create audio buffer of the same length as our array"
+        // const audioBuffer = audioContext.createBuffer(1, array.length, sampleRate);
+        // // "this copies our sine wave to the audio buffer"
+        // audioBuffer.copyToChannel(array, 0);
+        // // "some JavaScript magic to actually play the sound"
+        // const source = audioContext.createBufferSource();
+        // source.connect(audioContext.destination);
+        // source.buffer = audioBuffer;
+        // source.start();
+        // let wav = new WAV(Math.floor(sampleRate),1); //1 = mono, 2 = stereo
+        wav.addSamples([array]);
+        wav.play();
 
         // Disables startAudioBtn for duration of sound
         // Citation: https://stackoverflow.com/questions/30558587/javascript-disable-button-and-reenable-it-after-5-seconds
@@ -273,6 +279,18 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         startAudio({ array: h, sampleRate });
     }
 
+    // Download Audio
+    document.getElementById("downloadAudio").onclick = function() {prepareDownload()};
+
+    function downloadAudio({ array, sampleRate }) {
+        // let wav = new WAV(Math.floor(sampleRate),1); //1 = mono, 2 = stereo
+        wav.addSamples([array]);
+        wav.download('GWaudio.wav');
+    }
+
+    function prepareDownload() {
+        downloadAudio({ array: h, sampleRate });
+    }
 } // ----------------------- End of Update Function ---------------------- //
 
 // ----------------------------- UI Elements ----------------------------- //
@@ -343,12 +361,3 @@ function toggleFrequencyVsTimePlot() {
 }
 // ------------------ Execute update Function for initial time ------------------ //
 updateFunction(alpha, m1sliderval, m2sliderval, deviceSelection);
-
-/* 
-Things that need to be added or updated:
-- Stop sound when sliders are changed
-- Stop sound when button is pressed again
-- Pick deltat more carefully (based on sliders)
-- Separate images?
-- Check mobile view
-*/
