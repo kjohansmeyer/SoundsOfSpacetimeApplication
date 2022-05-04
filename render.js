@@ -248,7 +248,6 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
 
     const sampleRate = 1/deltat;
     console.log({sampleRate});
-    let wav = new WAV(Math.floor(sampleRate),1); //1 = mono, 2 = stereo
 
     function startAudio({ array, sampleRate }) {
         // // Old AudioContext to generate sounds - replaced with wav.js
@@ -265,7 +264,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
         // source.connect(audioContext.destination);
         // source.buffer = audioBuffer;
         // source.start();
-        // let wav = new WAV(Math.floor(sampleRate),1); //1 = mono, 2 = stereo
+        let wav = new WAV(Math.floor(sampleRate),1); //1 = mono, 2 = stereo
         wav.addSamples([array]);
         wav.play();
 
@@ -283,7 +282,7 @@ function updateFunction(alpha, m1sliderval, m2sliderval) {
     document.getElementById("downloadAudio").onclick = function() {prepareDownload()};
 
     function downloadAudio({ array, sampleRate }) {
-        // let wav = new WAV(Math.floor(sampleRate),1); //1 = mono, 2 = stereo
+        let wav = new WAV(Math.floor(sampleRate),1); //1 = mono, 2 = stereo
         wav.addSamples([array]);
         wav.download('GWaudio.wav');
     }
