@@ -97,72 +97,80 @@ body {
   height: 500px;
 }
 /* ------------------------------ Side Bar ------------------------------- */
-/* Citation: https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp */
+/* Citation: https://stackoverflow.com/questions/48066685/text-collapsing-on-side-menu-close */
 
-.sidebar {
-  height: 100%; /* 100% Full-height */
-  width: 0; /* 0 width - change this with JavaScript */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Stay on top */
-  top: 0;
-  left: 0;
-  background-color: #181818;
-  overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 60px; /* Place content 60px from the top */
-  transition: 0.4s; /* 0.5 second transition effect to slide in the sidebar */
-}
-
-/* The sidebar links */
-.sidebar a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
-
-/* When you mouse over the navigation links, change their color */
-.sidebar a:hover {
-  color: #f1f1f1;
-}
-
-/* Position and style the close button (top right corner) */
-.sidebar .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
-
-/* The button used to open the sidebar */
-.openbtn {
-  font-size: 20px;
-  cursor: pointer;
-  background-color: #212121;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-}
-
-.openbtn:hover {
-  color: black;
-  background-color: white;/*#444;*/
-  transition: 0.2s;
-}
-
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-#main {
-  transition: margin-left .5s; /* If you want a transition effect */
-  padding: 20px;
-}
-
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .sidebar {padding-top: 15px;}
-  .sidebar a {font-size: 18px;}
-}
+.menu-toggle {
+  cursor:pointer;
+  float:right;
+  line-height: 60px;
+  }
+  
+  .fa-bars {
+    color: #fff;
+    font-size: 30px;
+  }
+  
+  
+  .nav-wrapper {
+    width: 83%;
+    margin: 0 auto;
+  }
+  
+  
+  .navbar {
+    height: 75px;
+    background-color: gray;
+  }
+  
+  /* The side navigation menu */
+  .sidenav {
+      height: 100%; /* 100% Full-height */
+      width: 400px; /* 0 width - change this with JavaScript */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Stay on top */
+      top: 0; /* Stay at the top */
+      left: -400px;
+      /* background:rgba(75,156,211,0.9) url('../img/unc_pine_cb.svg') no-repeat; */
+      /* background: #212121 url('../img/unc_pine_cb.svg') no-repeat; */
+      background:rgba(33,33,33,0.9);
+      background-size: 200%;
+      overflow-x: visible; /* Disable horizontal scroll */
+      padding-top: 60px; /* Place content 60px from the top */
+      transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  }
+  
+  /* The navigation menu links */
+  .sidenav a {
+      padding: 15px 8px 10px 32px;
+      text-decoration: none;
+      font-size: 25px;
+      color: #fff;
+      display: block;
+      transition: 0.3s;
+  }
+  
+  /* When you mouse over the navigation links, change their color */
+  .sidenav a:hover {
+      color: gray;
+  }
+  
+  /* Position and style the close button (top right corner) */
+  .sidenav .closebtn {
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-size: 36px;
+  }
+  
+  a.sidenav:nth(1) {
+    margin-top: 30px;
+  }
+  
+  /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+  @media screen and (max-height: 450px) {
+      .sidenav {padding-top: 15px;}
+      .sidenav a {font-size: 18px;}
+  }
 
 /* -------------------------------- Bottom Bar ------------------------------- */
 #credits { 

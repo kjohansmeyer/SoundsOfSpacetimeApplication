@@ -44,20 +44,44 @@
        </head>
      
        <body>
-           <noscript>You need to enable JavaScript to run this application.</noscript>
-           <!-- Text -->
-           <div id="main">
-             <button class="openbtn" onclick="openNav()">&#9776; Open Sidebar</button>
-             <h1>Sounds of Spacetime - Interactive Gravitational Wave Tool</h1>
+          <noscript>You need to enable JavaScript to run this application.</noscript>
+          <!-- Text -->
+          <div id="main">
+            <button class="openbtn" onclick="openNav()">&#9776; Open Sidebar</button>
+            <h1>Sounds of Spacetime</h1>
+            <h2>Interactive Gravitational Wave Tool</h2>
+          </div>
              
-             <!-- Citation: https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp -->
-             <div id="mySidebar" class="sidebar">
-               <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-               <a href="http://soundsofspacetime.org" target="_blank">Sounds of Spacetime</a>
-               <a href="https://www.soundsofspacetime.org/what-are-gws.html" target="_blank">What are Gravitational Waves?</a>
-               <a href="https://www.soundsofspacetime.org/about-gw-sounds.html" target="_blank">About Gravitational Wave Sounds</a>
-               <a href="https://www.soundsofspacetime.org/contributors.html" target="_blank">About</a>
-             </div>
+          <!-- Citation: https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp -->
+          <div id="mySideNav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+
+            <div class="infoBox">
+              <h2><u><a href="http://soundsofspacetime.org" target="_blank">Sounds of Spacetime</a></u></h2>
+              <div id="sideBarSubheading">
+                <a href="https://www.soundsofspacetime.org/what-are-gws.html" target="_blank">What are Gravitational Waves?</a>
+                <a href="https://www.soundsofspacetime.org/about-gw-sounds.html" target="_blank">About Gravitational Wave Sounds</a>
+                <a href="https://www.soundsofspacetime.org/contributors.html" target="_blank">About Sounds</a>
+              </div>
+            </div></br>
+
+            <div class="infoBox">
+              <h2><u><a href="https://www.gw-openscience.org/" target="_blank">GWOSC</a></u></h2>
+              <div id="sideBarSubheading">
+                <a href="https://www.gw-openscience.org/eventapi/html/allevents/" target="_blank">Event List</a>
+                <a href="https://www.gw-openscience.org/eventapi/html/" target="_blank">Release List</a>
+                <a href="https://www.gw-openscience.org/links/" target="_blank">About GWOSC</a>
+              </div>
+            </div></br>
+
+            <div class="infoBox">
+              <u><h2>Other Resources</h2></u>
+              <div id="sideBarSubheading">
+                <a href="https://www.ligo.caltech.edu/" target="_blank">LIGO</a>
+                <a href="https://www.montclair.edu/physics-astronomy/" target="_blank">Montclair State University</a>
+              </div>
+            </div>
+          </div>
      
              <!-- Information Box -->
              <div id="infoBox">

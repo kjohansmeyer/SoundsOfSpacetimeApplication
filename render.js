@@ -330,15 +330,16 @@ selectDevice.addEventListener('change', function (event) {
 })
 
 // --------------------------- Side Bar Functionality --------------------------- //
+// Citation: https://stackoverflow.com/questions/48066685/text-collapsing-on-side-menu-close
 function openNav() {
-    document.getElementById("mySidebar").style.width = "200px";
-    document.getElementById("main").style.marginLeft = "200px";
-  }
-  
-  function closeNav() {
-    document.getElementById("mySidebar").style.width = "0";
-    document.getElementById("main").style.marginLeft= "0";
-  }
+    document.getElementById("mySideNav").style.left = "0px";
+}
+
+/* Set the width of the side navigation to 0 */
+function closeNav() {
+    document.getElementById("mySideNav").style.left = "-400px";
+}
+
 // --------------------------- Toggle Plots --------------------------- //
 //Citation: https://www.w3schools.com/howto/howto_js_toggle_hide_show.asp
 function toggleStrainVsTimePlot() {
